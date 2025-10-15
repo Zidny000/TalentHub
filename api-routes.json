@@ -58,5 +58,33 @@
     "path": "/view-email-content",
     "file": "email-test.routes.ts",
     "fullPath": "/api/view-email-content"
+  },
+  {
+    "method": "POST",
+    "path": "/jobs/:id/apply",
+    "file": "application.routes.ts",
+    "fullPath": "/api/jobs/:id/apply",
+    "description": "Apply to a job (CANDIDATE only)"
+  },
+  {
+    "method": "GET",
+    "path": "/jobs/:id/applications",
+    "file": "application.routes.ts",
+    "fullPath": "/api/jobs/:id/applications",
+    "description": "Get all applications for a job (EMPLOYER/ADMIN only)"
+  },
+  {
+    "method": "GET",
+    "path": "/applications/:id",
+    "file": "application.routes.ts",
+    "fullPath": "/api/applications/:id",
+    "description": "Get application details (EMPLOYER/CANDIDATE)"
+  },
+  {
+    "method": "GET",
+    "path": "/jobs/:id/export",
+    "file": "application.routes.ts",
+    "fullPath": "/api/jobs/:id/export",
+    "description": "Export job applications as CSV (EMPLOYER/ADMIN only)"
   }
 ]

@@ -4,6 +4,7 @@ import logger from './utils/logger';
 import routes from './routes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger';
+import path from 'path';
 
 // Create Express application
 const app: Application = express();
@@ -11,6 +12,9 @@ const app: Application = express();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

@@ -1,4 +1,6 @@
 import { body } from 'express-validator';
+import { resumeValidators } from './resume.validators';
+import { jobValidators } from './job.validators';
 
 /**
  * Validation rules for user registration
@@ -36,3 +38,8 @@ export const loginValidation = [
   body('password')
     .notEmpty().withMessage('Password is required')
 ];
+
+// Export validators
+export { resumeValidators };
+export { jobValidators };
+export { applicationValidators } from './application.validators';

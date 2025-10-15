@@ -94,3 +94,105 @@
 {"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 02:46:26"}
 {"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 02:46:26"}
 {"errorDetails":[{"field":"email","message":"Invalid email format"}],"isOperational":true,"level":"error","message":"Error: Validation error occurred.","service":"talenthub-api","stack":"Error: Validation error occurred.\n    at D:\\Work\\Personal\\Nodejs-SQL-Template\\TalentHub\\src\\middlewares\\validation.middleware.ts:22:10\n    at Generator.next (<anonymous>)\n    at fulfilled (D:\\Work\\Personal\\Nodejs-SQL-Template\\TalentHub\\src\\middlewares\\validation.middleware.ts:5:58)\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)","statusCode":400,"timestamp":"2025-10-16 02:46:54"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 02:49:38"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 02:49:38"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:02:51"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:02:51"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:02:57"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:02:57"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:03:11"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:03:11"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:03:26"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:03:26"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:04:11"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:04:11"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:04:45"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:04:45"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:05:13"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:05:13"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:05:27"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:05:27"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:06:31"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:06:31"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:06:44"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:06:44"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:07:00"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:07:00"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:07:19"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:07:19"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:07:35"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:07:35"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:07:56"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:07:56"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:08:09"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:08:09"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:08:23"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:08:23"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:08:36"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:08:36"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:08:56"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:08:56"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:09:12"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:09:13"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:10:36"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:10:36"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:16:04"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:16:04"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:16:11"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:16:11"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:16:51"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:16:51"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:17:28"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:17:28"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:17:38"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:17:38"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:17:47"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:17:47"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:18:07"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:18:07"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:18:33"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:18:33"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:18:48"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:18:48"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:19:13"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:19:13"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:20:32"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:20:32"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:22:05"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:22:05"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:22:27"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:22:27"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:22:52"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:22:52"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:23:01"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:23:01"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:23:34"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:23:34"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:23:51"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:23:51"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:24:41"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:24:41"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:24:51"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:24:51"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:25:15"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:25:15"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:25:24"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:25:24"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:25:37"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:25:37"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:25:49"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:25:49"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:26:03"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:26:03"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:27:13"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:27:13"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:27:58"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:27:58"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:43:53"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:43:53"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:44:16"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:44:16"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:45:33"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:45:33"}
+{"level":"info","message":"Database connected successfully","service":"talenthub-api","timestamp":"2025-10-16 04:46:28"}
+{"level":"info","message":"Server running on port 3000","service":"talenthub-api","timestamp":"2025-10-16 04:46:28"}

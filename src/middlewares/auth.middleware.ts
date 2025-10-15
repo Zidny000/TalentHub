@@ -69,3 +69,24 @@ export const authorize = (allowedRoles: string[]) => {
     }
   };
 };
+
+/**
+ * Check user role middleware
+ */
+export const checkRole = (allowedRoles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (!req.user) {
+        throw new UnauthorizedError('Authentication required');
+      }
+
+      if (!allowedRoles.includes(req.user.role)) {
+        throw new ForbiddenError('Unauthorized access', `This action requires ${allowedRoles.join(' or ')} role`);
+      }
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+};
