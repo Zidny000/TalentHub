@@ -1,0 +1,38 @@
+import { body } from 'express-validator';
+
+/**
+ * Validation rules for user registration
+ */
+export const registerValidation = [
+  body('name')
+    .notEmpty().withMessage('Name is required')
+    .isString().withMessage('Name must be a string')
+    .isLength({ min: 2, max: 50 }).withMessage('Name must be between 2 and 50 characters'),
+  
+  body('email')
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Invalid email format')
+    .normalizeEmail(),
+    
+  body('password')
+    .notEmpty().withMessage('Password is required')
+    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/).withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number'),
+    
+  body('role')
+    .optional()
+    .isIn(['ADMIN', 'EMPLOYER', 'CANDIDATE']).withMessage('Invalid role')
+];
+
+/**
+ * Validation rules for login
+ */
+export const loginValidation = [
+  body('email')
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Invalid email format')
+    .normalizeEmail(),
+  
+  body('password')
+    .notEmpty().withMessage('Password is required')
+];

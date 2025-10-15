@@ -65,6 +65,7 @@ model User {
   resumes        Resume[]
   payments       Payment[]
   twoFactors     TwoFactor[]
+  refreshTokens  RefreshToken[]
 }
 
 model Job {
@@ -151,4 +152,20 @@ model TwoFactor {
   user        User             @relation(fields: [userId], references: [id])
 
   @@index([userId])
+}
+
+model RefreshToken {
+  id          String    @id @default(uuid())
+  token       String    @unique
+  userId      String
+  expiresAt   DateTime
+  issuedAt    DateTime  @default(now())
+  isRevoked   Boolean   @default(false)
+  ipAddress   String?
+  userAgent   String?
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
 }

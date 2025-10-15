@@ -1,0 +1,62 @@
+[
+  {
+    "method": "POST",
+    "path": "/register",
+    "file": "auth.routes.ts",
+    "fullPath": "/api/register"
+  },
+  {
+    "method": "GET",
+    "path": "/verify-email",
+    "file": "auth.routes.ts",
+    "fullPath": "/api/verify-email"
+  },
+  {
+    "method": "POST",
+    "path": "/login",
+    "file": "auth.routes.ts",
+    "fullPath": "/api/login"
+  },
+  {
+    "method": "POST",
+    "path": "/verify-2fa",
+    "file": "auth.routes.ts",
+    "fullPath": "/api/verify-2fa"
+  },
+  {
+    "method": "POST",
+    "path": "/refresh",
+    "file": "auth.routes.ts",
+    "fullPath": "/api/refresh"
+  },
+  {
+    "method": "POST",
+    "path": "/logout",
+    "file": "auth.routes.ts",
+    "fullPath": "/api/logout"
+  },
+  {
+    "method": "POST",
+    "path": "/logout-all",
+    "file": "auth.routes.ts",
+    "fullPath": "/api/logout-all"
+  },
+  {
+    "method": "GET",
+    "path": "/show-verification",
+    "file": "email-test.routes.ts",
+    "fullPath": "/api/show-verification"
+  },
+  {
+    "method": "GET",
+    "path": "/process-verification",
+    "file": "email-test.routes.ts",
+    "fullPath": "/api/process-verification"
+  },
+  {
+    "method": "POST",
+    "path": "/view-email-content",
+    "file": "email-test.routes.ts",
+    "fullPath": "/api/view-email-content"
+  }
+]

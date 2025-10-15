@@ -1,0 +1,400 @@
+{
+  "info": {
+    "name": "TalentHub API",
+    "description": "API collection for TalentHub authentication workflows",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "b5f39050-0e51-49c7-87c9-b0354be4eef9"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "description": "API endpoints for auth",
+      "item": [
+        {
+          "name": "POST Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "register"
+              ]
+            },
+            "description": "POST request to /api/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"securePassword123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "_postman_id": "7a64d389-97fe-490d-90c7-f45cc164ed4c"
+        },
+        {
+          "name": "GET Verify email",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/verify-email?token={{emailToken}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "verify-email"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{emailToken}}"
+                }
+              ]
+            },
+            "description": "GET request to /api/verify-email"
+          },
+          "response": [],
+          "_postman_id": "eeaedf5b-c972-4aaa-82de-ac673f58c398"
+        },
+        {
+          "name": "POST Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "description": "POST request to /api/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securePassword123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "_postman_id": "cea1267b-cb34-4745-8542-4a10b04783e5"
+        },
+        {
+          "name": "POST Verify 2fa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/verify-2fa",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "verify-2fa"
+              ]
+            },
+            "description": "POST request to /api/verify-2fa",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"code\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "_postman_id": "1528b66b-b161-4e09-a0aa-35da6b5f1e97"
+        },
+        {
+          "name": "POST Refresh",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/refresh",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "refresh"
+              ]
+            },
+            "description": "POST request to /api/refresh",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "_postman_id": "d3fbf69b-40f4-4fc0-9d82-c98ced86f79f"
+        },
+        {
+          "name": "POST Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "logout"
+              ]
+            },
+            "description": "POST request to /api/logout",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "_postman_id": "16868b06-38fc-4dd5-a3bd-c99f7cd3ac22"
+        },
+        {
+          "name": "POST Logout all",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/logout-all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "logout-all"
+              ]
+            },
+            "description": "POST request to /api/logout-all",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "_postman_id": "e39aa791-a842-49fa-a351-e793736245d0"
+        }
+      ],
+      "_postman_id": "38e9006d-aeac-48aa-b77d-f68c108d49c2"
+    },
+    {
+      "name": "Email-test",
+      "description": "API endpoints for email-test",
+      "item": [
+        {
+          "name": "GET Show verification",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/show-verification?token={{emailToken}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "show-verification"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{emailToken}}"
+                }
+              ]
+            },
+            "description": "GET request to /api/show-verification"
+          },
+          "response": [],
+          "_postman_id": "e99686e8-fb1e-431a-9c78-6c9865b5a16d"
+        },
+        {
+          "name": "GET Process verification",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/process-verification?token={{emailToken}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "process-verification"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{emailToken}}"
+                }
+              ]
+            },
+            "description": "GET request to /api/process-verification"
+          },
+          "response": [],
+          "_postman_id": "d621c972-15ad-4deb-a353-dcfda6f8592b"
+        },
+        {
+          "name": "POST View email content",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/view-email-content",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "view-email-content"
+              ]
+            },
+            "description": "POST request to /api/view-email-content",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "_postman_id": "6004681f-20d3-4a44-8079-b302c8c8c81d"
+        }
+      ],
+      "_postman_id": "cadddabd-fd80-4486-b50b-997970e8eca0"
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string",
+      "description": "Access token received after login or 2FA verification"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string",
+      "description": "Refresh token received after login or 2FA verification"
+    },
+    {
+      "key": "emailToken",
+      "value": "",
+      "type": "string",
+      "description": "Token received in verification email"
+    }
+  ]
+}
