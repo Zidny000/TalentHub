@@ -36,43 +36,7 @@ export class ApplicationRepository {
     });
   }
 
-  /**
-   * Find applications by applicant ID (job application history)
-   */
-  async findByApplicantId(applicantId: string) {
-    return prisma.application.findMany({
-      where: { applicantId },
-      include: {
-        job: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            company: true,
-            location: true,
-            type: true,
-            postedAt: true,
-            postedBy: {
-              select: {
-                id: true,
-                name: true
-              }
-            }
-          }
-        },
-        resume: {
-          select: {
-            id: true,
-            title: true,
-            pdfUrl: true
-          }
-        }
-      },
-      orderBy: {
-        appliedAt: 'desc'
-      }
-    });
-  }
+
 
   /**
    * Find applications for a specific job
@@ -115,6 +79,7 @@ export class ApplicationRepository {
             location: true,
             type: true,
             createdAt: true,
+            isActive: true,
             postedBy: {
               select: {
                 id: true,
