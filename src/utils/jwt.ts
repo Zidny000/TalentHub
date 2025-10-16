@@ -32,10 +32,11 @@ export const generateAccessToken = (payload: AuthTokenPayload): string => {
  */
 export const generateRefreshToken = (payload: Omit<RefreshTokenPayload, 'tokenId'>): { token: string, tokenId: string } => {
   const tokenId = uuidv4();
+  
   const token = jwt.sign(
     { ...payload, tokenId, tokenType: 'refresh' }, 
     REFRESH_SECRET, 
-    { expiresIn: REFRESH_TOKEN_EXPIRY }
+    { expiresIn: REFRESH_TOKEN_EXPIRY } // This should be in seconds
   );
   
   return { token, tokenId };

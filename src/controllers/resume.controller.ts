@@ -196,11 +196,6 @@ export class ResumeController {
         throw new AppError('You do not have permission to access this resume', 403);
       }
       
-      // If PDF already exists, return it
-      if (resume.pdfUrl) {
-        return res.sendFile(process.cwd() + resume.pdfUrl);
-      }
-      
       // Parse experiences if it's a string
       let experiences = resume.experiences;
       if (typeof experiences === 'string') {
@@ -211,17 +206,25 @@ export class ResumeController {
         }
       }
       
-      // Generate PDF
-      const pdfUrl = await pdfService.generateResumePdf({
-        ...resume,
-        experiences
-      });
+      // Generate PDF if it doesn't exist
+      if (!resume.pdfUrl) {
+        const pdfUrl = await pdfService.generateResumePdf({
+          ...resume,
+          experiences
+        });
+        
+        // Update resume with PDF URL
+        await resumeRepository.update(id, { pdfUrl });
+        resume.pdfUrl = pdfUrl;
+      }
       
-      // Update resume with PDF URL
-      await resumeRepository.update(id, { pdfUrl });
+      // Set appropriate headers for file download
+      const filename = `resume-${resume.title.replace(/\s+/g, '-')}.pdf`;
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
       
       // Send PDF file
-      return res.sendFile(process.cwd() + pdfUrl);
+      return res.sendFile(process.cwd() + resume.pdfUrl);
     } catch (error) {
       if (error instanceof AppError) {
         return ResponseFormatter.error(res, error.message, error.errorDetails, error.statusCode);

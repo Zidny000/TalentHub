@@ -9,14 +9,14 @@ const router = Router();
 // Public routes
 router.get('/', validate(jobValidators.listJobs), jobController.list.bind(jobController));
 
+// Public route for specific job
+router.get('/:id', jobController.getById.bind(jobController));
+
 // Protected routes - require authentication
 router.use(authenticate);
 
 // Get jobs posted by the current user
 router.get('/my/listings', jobController.getMyJobs.bind(jobController));
-
-// Public route for specific job
-router.get('/:id', validate(jobValidators.jobId), jobController.getById.bind(jobController));
 
 // Only employers and admins can create jobs
 router.post(

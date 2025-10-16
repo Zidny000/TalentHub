@@ -15,6 +15,8 @@ class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const userData: UserInput = req.body;
+
+      console.log(userData)
       
       // Validate request body
       if (!userData.name || !userData.email || !userData.password) {
@@ -23,6 +25,7 @@ class AuthController {
           message: 'Name, email and password are required'
         });
       }
+
       
       const result = await AuthService.register(userData);
       
