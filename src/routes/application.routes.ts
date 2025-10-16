@@ -41,11 +41,7 @@ router.get(
   applicationController.exportJobApplications
 );
 
-/**
- * @route GET /applications/history
- * @desc Get current user's job application history
- * @access Private - CANDIDATE only
- */
+// Private - CANDIDATE only (view their own application history)
 router.get(
   '/history',
   authenticate,

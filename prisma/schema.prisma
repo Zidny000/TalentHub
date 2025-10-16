@@ -45,6 +45,13 @@ enum TwoFactorMethod {
   AUTH_APP
 }
 
+enum InterviewStatus {
+  SCHEDULED
+  RESCHEDULED
+  CANCELLED
+  COMPLETED
+}
+
 
 // MODELS
 
@@ -60,12 +67,14 @@ model User {
   updatedAt        DateTime @updatedAt
 
   // Relations
-  jobs           Job[]          @relation("UserJobs")
-  applications   Application[]   @relation("UserApplications")
-  resumes        Resume[]
-  payments       Payment[]
-  twoFactors     TwoFactor[]
-  refreshTokens  RefreshToken[]
+  jobs               Job[]            @relation("UserJobs")
+  applications       Application[]    @relation("UserApplications")
+  resumes            Resume[]
+  payments           Payment[]
+  twoFactors         TwoFactor[]
+  refreshTokens      RefreshToken[]
+  employerInterviews Interview[]      @relation("EmployerInterviews")
+  candidateInterviews Interview[]      @relation("CandidateInterviews")
 }
 
 model Job {
@@ -103,9 +112,10 @@ model Application {
   job            Job     @relation(fields: [jobId], references: [id])
   applicant      User    @relation("UserApplications", fields: [applicantId], references: [id])
   resume         Resume? @relation(fields: [resumeId], references: [id])
+  interviews     Interview[]
 
   @@index([jobId])           // list all applications for a job
-  @@index([applicantId])     // list candidate’s applications
+  @@index([applicantId])     // list candidate's applications
 }
 
 model Resume {
@@ -168,4 +178,28 @@ model RefreshToken {
 
   @@index([userId])
   @@index([token])
+}
+
+model Interview {
+  id              String         @id @default(uuid())
+  applicationId   String
+  employerId      String
+  candidateId     String
+  scheduledAt     DateTime
+  duration        Int            // duration in minutes
+  location        String?        // can be a physical location or video call link
+  description     String?
+  status          InterviewStatus @default(SCHEDULED)
+  feedback        String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  application     Application    @relation(fields: [applicationId], references: [id])
+  employer        User           @relation("EmployerInterviews", fields: [employerId], references: [id])
+  candidate       User           @relation("CandidateInterviews", fields: [candidateId], references: [id])
+
+  @@index([applicationId])
+  @@index([employerId])
+  @@index([candidateId])
 }

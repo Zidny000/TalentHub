@@ -2,6 +2,142 @@
  * @swagger
  * components:
  *   schemas:
+ *     InterviewRequest:
+ *       type: object
+ *       required:
+ *         - scheduledAt
+ *         - duration
+ *       properties:
+ *         scheduledAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date and time when the interview is scheduled
+ *         duration:
+ *           type: integer
+ *           minimum: 15
+ *           maximum: 240
+ *           description: Duration of the interview in minutes
+ *         location:
+ *           type: string
+ *           description: Location of the interview (physical address or virtual meeting link)
+ *         description:
+ *           type: string
+ *           description: Additional details about the interview
+ *       example:
+ *         scheduledAt: "2025-10-25T14:00:00Z"
+ *         duration: 60
+ *         location: "https://zoom.us/meeting/123456"
+ *         description: "Technical interview for Frontend Developer position"
+ *
+ *     InterviewUpdateRequest:
+ *       type: object
+ *       properties:
+ *         scheduledAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date and time when the interview is scheduled
+ *         duration:
+ *           type: integer
+ *           minimum: 15
+ *           maximum: 240
+ *           description: Duration of the interview in minutes
+ *         location:
+ *           type: string
+ *           description: Location of the interview (physical address or virtual meeting link)
+ *         description:
+ *           type: string
+ *           description: Additional details about the interview
+ *       example:
+ *         scheduledAt: "2025-10-26T15:00:00Z"
+ *         duration: 45
+ *         location: "https://meet.google.com/abc-defg-hij"
+ *
+ *     Interview:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique ID of the interview
+ *         applicationId:
+ *           type: string
+ *           description: ID of the job application
+ *         employerId:
+ *           type: string
+ *           description: ID of the employer
+ *         candidateId:
+ *           type: string
+ *           description: ID of the candidate
+ *         scheduledAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time of the interview
+ *         duration:
+ *           type: integer
+ *           description: Duration in minutes
+ *         location:
+ *           type: string
+ *           description: Location (physical or virtual)
+ *         description:
+ *           type: string
+ *           description: Interview description
+ *         status:
+ *           type: string
+ *           enum: [SCHEDULED, RESCHEDULED, CANCELLED, COMPLETED]
+ *           description: Status of the interview
+ *         feedback:
+ *           type: string
+ *           description: Feedback after interview or reason for cancellation
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *       example:
+ *         id: "123e4567-e89b-12d3-a456-426614174000"
+ *         applicationId: "123e4567-e89b-12d3-a456-426614174001"
+ *         employerId: "123e4567-e89b-12d3-a456-426614174002"
+ *         candidateId: "123e4567-e89b-12d3-a456-426614174003"
+ *         scheduledAt: "2025-10-25T14:00:00Z"
+ *         duration: 60
+ *         location: "https://zoom.us/meeting/123456"
+ *         description: "Technical interview for Frontend Developer position"
+ *         status: "SCHEDULED"
+ *         createdAt: "2025-10-17T09:00:00Z"
+ *         updatedAt: "2025-10-17T09:00:00Z"
+ *
+ *     InterviewResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: true
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ *         message:
+ *           type: string
+ *           example: "Interview scheduled successfully"
+ *         data:
+ *           $ref: '#/components/schemas/Interview'
+ *
+ *     InterviewsResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: true
+ *         statusCode:
+ *           type: integer
+ *           example: 200
+ *         message:
+ *           type: string
+ *           example: "Interviews retrieved successfully"
+ *         data:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Interview'
+ *
  *     User:
  *       type: object
  *       properties:

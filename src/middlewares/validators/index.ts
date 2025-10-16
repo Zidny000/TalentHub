@@ -1,6 +1,7 @@
 import { body } from 'express-validator';
 import { resumeValidators } from './resume.validators';
 import { jobValidators } from './job.validators';
+import { interviewValidators } from './interview.validators';
 
 /**
  * Validation rules for user registration

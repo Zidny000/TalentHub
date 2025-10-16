@@ -23,6 +23,7 @@ export class ApplicationRepository {
       where: { id },
       include: {
         job: true,
+        interviews: true,
         applicant: {
           select: {
             id: true,
@@ -45,6 +46,13 @@ export class ApplicationRepository {
     return prisma.application.findMany({
       where: { jobId },
       include: {
+        interviews: {
+          select: {
+            id: true,
+            scheduledAt: true,
+            status: true
+          }
+        },
         applicant: {
           select: {
             id: true,
