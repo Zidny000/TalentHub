@@ -4,6 +4,7 @@ import emailTestRoutes from './email-test.routes';
 import resumeRoutes from './resume.routes';
 import jobRoutes from './job.routes';
 import { applicationRoutes } from './application.routes';
+import { paymentRoutes } from './payment.routes';
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.use('/auth', authRoutes);
 router.use('/email-test', emailTestRoutes);
 router.use('/resumes', resumeRoutes);
 router.use('/jobs', jobRoutes);
+router.use('/payments', paymentRoutes);
 router.use('/', applicationRoutes); // Application routes (some nested under /jobs)
 
 export default router;

@@ -140,4 +140,30 @@
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
+ *
+ *     PaymentInfo:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *           description: The payment's unique identifier
+ *         amount:
+ *           type: number
+ *           description: Amount in cents
+ *         currency:
+ *           type: string
+ *           enum: [USD]
+ *           default: USD
+ *         status:
+ *           type: string
+ *           enum: [PENDING, SUCCESS, FAILED]
+ *           description: Payment status
+ *         provider:
+ *           type: string
+ *           description: Payment provider (e.g., 'stripe')
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Creation timestamp
  */

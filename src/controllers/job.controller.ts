@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { jobService } from '../services/job.service';
 import { AppError } from '../utils/errors';
 import { ResponseFormatter } from '../utils/response';
+import { paymentService } from '../services/payment.service';
 
 export class JobController {
   /**
@@ -13,11 +14,20 @@ export class JobController {
       const userRole = req.user?.role;
       
       // Call job service to create the job
-      const { job, message } = await jobService.createJob(
+      const { job, message, paymentRequired } = await jobService.createJob(
         userId as string, 
         userRole as string, 
         req.body
       );
+      
+      // If payment is required, return job with payment redirection info
+      if (paymentRequired) {
+        return ResponseFormatter.success(res, message, {
+          job,
+          paymentRequired: true,
+          paymentUrl: `/api/payments/jobs/${job.id}/payment`
+        }, 201);
+      }
       
       return ResponseFormatter.success(res, message, job, 201);
     } catch (error) {

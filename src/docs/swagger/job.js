@@ -228,7 +228,18 @@
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/Job'
+ *                   oneOf:
+ *                     - $ref: '#/components/schemas/Job'
+ *                     - type: object
+ *                       properties:
+ *                         job:
+ *                           $ref: '#/components/schemas/Job'
+ *                         paymentRequired:
+ *                           type: boolean
+ *                           description: Whether payment is required for this job post
+ *                         paymentUrl:
+ *                           type: string
+ *                           description: URL to initiate payment if required
  *       401:
  *         description: Unauthorized
  *       403:

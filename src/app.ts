@@ -9,6 +9,9 @@ import path from 'path';
 // Create Express application
 const app: Application = express();
 
+// Special route for Stripe webhooks (needs raw body)
+app.use('/api/payments/webhook/stripe', express.raw({ type: 'application/json' }));
+
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

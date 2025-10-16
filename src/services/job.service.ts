@@ -1,5 +1,6 @@
 import { jobRepository } from '../repositories/job.repository';
 import { AppError } from '../utils/errors';
+import { paymentService } from './payment.service';
 
 // Maximum number of free job posts allowed per employer
 const MAX_FREE_JOB_POSTS = 3;
@@ -35,7 +36,8 @@ export class JobService {
       const freeJobCount = await jobRepository.countFreeJobsByUser(userId);
       
       if (freeJobCount >= MAX_FREE_JOB_POSTS) {
-        throw new AppError(`You have reached your free job post limit (${MAX_FREE_JOB_POSTS}). Please upgrade to a paid post.`, 403);
+        // Convert this to a paid post since free quota is exceeded
+        jobData.isPaidPost = true;
       }
     }
     
@@ -48,20 +50,31 @@ export class JobService {
       type,
       salaryMin: salaryMin ? parseInt(salaryMin) : undefined,
       salaryMax: salaryMax ? parseInt(salaryMax) : undefined,
-      isPaidPost,
+      isPaidPost: jobData.isPaidPost,
       postedById: userId,
       // If paid post, it starts as inactive until payment is confirmed
-      isActive: !isPaidPost || userRole === 'ADMIN'
+      isActive: !jobData.isPaidPost || userRole === 'ADMIN'
     });
     
     // For paid posts, inform user that payment is required
     let message = 'Job posted successfully';
-    if (isPaidPost && userRole !== 'ADMIN') {
+    let paymentRequired = false;
+    let paymentSession = null;
+    
+    if (jobData.isPaidPost && userRole !== 'ADMIN') {
       message = 'Job created but requires payment to activate';
-      // TODO: Create a payment record or trigger payment flow
+      paymentRequired = true;
+      
+      // Return job ID for payment flow
+      return { 
+        job, 
+        message, 
+        paymentRequired, 
+        paymentSession: null  // Will be created separately
+      };
     }
     
-    return { job, message };
+    return { job, message, paymentRequired, paymentSession };
   }
   
   /**
