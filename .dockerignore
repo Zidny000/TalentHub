@@ -1,0 +1,42 @@
+# Dependency directories
+node_modules
+npm-debug.log
+
+# Prisma
+.projectDetails
+/src/generated/prisma
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build files
+dist
+build
+
+# Git related
+.git
+.gitignore
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.vscode
+.idea
+*.swp
+*.swo
+
+# Local uploads
+uploads/*
+!uploads/exports/.gitkeep
+!uploads/resumes/.gitkeep
+
+# Temporary files
+tmp
+temp

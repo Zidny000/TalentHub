@@ -2,7 +2,15 @@ import { applicationRepository } from '../repositories/application.repository';
 import { jobRepository } from '../repositories/job.repository';
 import { resumeRepository } from '../repositories/resume.repository';
 import { exportService } from '../services/export.service';
+import { CacheService } from './cache.service';
 import { AppError } from '../utils/errors';
+
+// Cache TTL in seconds
+const CACHE_TTL = {
+  JOB_APPLICATIONS: 300, // 5 minutes
+  APPLICATION_DETAIL: 600, // 10 minutes
+  USER_APPLICATIONS: 600 // 10 minutes
+};
 
 export class ApplicationService {
   /**
@@ -82,8 +90,20 @@ export class ApplicationService {
       throw new AppError('You do not have permission to view these applications', 403);
     }
     
-    // Get applications
+    // Generate cache key
+    const cacheKey = `applications:job:${jobId}`;
+    
+    // Try to get from cache first
+    const cachedApplications = await CacheService.get(cacheKey);
+    if (cachedApplications) {
+      return cachedApplications;
+    }
+    
+    // Get applications from database
     const applications = await applicationRepository.findByJobId(jobId);
+    
+    // Store in cache
+    await CacheService.set(cacheKey, applications, CACHE_TTL.JOB_APPLICATIONS);
     
     return applications;
   }
@@ -97,7 +117,25 @@ export class ApplicationService {
       throw new AppError('User not authenticated', 401);
     }
     
-    // Get application
+    // Generate cache key
+    const cacheKey = `applications:detail:${applicationId}`;
+    
+    // Try to get from cache first
+    const cachedApplication = await CacheService.get<any>(cacheKey);
+    if (cachedApplication) {
+      // Still need to verify permission even with cached data
+      const isApplicant = cachedApplication.applicantId === userId;
+      const isJobOwner = cachedApplication.job.postedById === userId;
+      const isAdmin = userRole === 'ADMIN';
+      
+      if (!isApplicant && !isJobOwner && !isAdmin) {
+        throw new AppError('You do not have permission to view this application', 403);
+      }
+      
+      return cachedApplication;
+    }
+    
+    // Get application from database
     const application = await applicationRepository.findById(applicationId);
     
     if (!application) {
@@ -112,6 +150,9 @@ export class ApplicationService {
     if (!isApplicant && !isJobOwner && !isAdmin) {
       throw new AppError('You do not have permission to view this application', 403);
     }
+    
+    // Store in cache
+    await CacheService.set(cacheKey, application, CACHE_TTL.APPLICATION_DETAIL);
     
     return application;
   }
@@ -156,10 +197,36 @@ export class ApplicationService {
       throw new AppError('Only candidates can view their application history', 403);
     }
     
+    // Generate cache key
+    const cacheKey = `applications:user:${userId}`;
+    
+    // Try to get from cache first
+    const cachedHistory = await CacheService.get<any>(cacheKey);
+    if (cachedHistory) {
+      return cachedHistory;
+    }
+    
     // Get applications by applicant ID
     const applications = await applicationRepository.findByApplicantId(userId);
     
+    // Store in cache
+    await CacheService.set(cacheKey, applications, CACHE_TTL.USER_APPLICATIONS);
+    
     return applications;
+  }
+  
+  /**
+   * Helper method to invalidate application-related cache entries
+   */
+  async invalidateApplicationCache(applicationId: string, jobId: string, applicantId: string): Promise<void> {
+    // Invalidate specific application cache
+    await CacheService.delete(`applications:detail:${applicationId}`);
+    
+    // Invalidate job's applications cache
+    await CacheService.delete(`applications:job:${jobId}`);
+    
+    // Invalidate user's applications cache
+    await CacheService.delete(`applications:user:${applicantId}`);
   }
 }
 

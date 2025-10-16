@@ -2,6 +2,7 @@ import { jobOfferRepository } from '../repositories/jobOffer.repository';
 import { applicationRepository } from '../repositories/application.repository';
 import { interviewRepository } from '../repositories/interview.repository';
 import { jobRepository } from '../repositories/job.repository';
+import { CacheService } from './cache.service';
 import { AppError } from '../utils/errors';
 
 export class JobOfferService {
@@ -215,6 +216,9 @@ export class JobOfferService {
 
     // Update application status to HIRED
     await applicationRepository.updateStatus(jobOffer.applicationId, 'HIRED');
+    
+    // Invalidate application caches
+    await this.invalidateApplicationCaches(jobOffer.applicationId, jobOffer.candidateId);
 
     return updatedOffer;
   }
@@ -248,7 +252,35 @@ export class JobOfferService {
       updateData.rejectionReason = reason;
     }
 
-    return jobOfferRepository.update(id, updateData);
+    const updatedOffer = await jobOfferRepository.update(id, updateData);
+    
+    // Invalidate application caches
+    await this.invalidateApplicationCaches(jobOffer.applicationId, jobOffer.candidateId);
+    
+    return updatedOffer;
+  }
+  
+  /**
+   * Helper method to invalidate application-related caches
+   */
+  private async invalidateApplicationCaches(applicationId: string, candidateId: string): Promise<void> {
+    try {
+      // Find application to get related IDs
+      const application = await applicationRepository.findById(applicationId);
+      if (!application) return;
+      
+      // Invalidate application detail cache
+      await CacheService.delete(`applications:detail:${applicationId}`);
+      
+      // Invalidate job's applications cache
+      await CacheService.delete(`applications:job:${application.jobId}`);
+      
+      // Invalidate candidate's applications cache
+      await CacheService.delete(`applications:user:${candidateId}`);
+    } catch (error) {
+      // Log error but don't interrupt the flow for cache issues
+      console.error('Error invalidating application caches:', error);
+    }
   }
 }
 

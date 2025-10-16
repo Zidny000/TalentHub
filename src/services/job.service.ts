@@ -1,9 +1,17 @@
 import { jobRepository } from '../repositories/job.repository';
 import { AppError } from '../utils/errors';
 import { paymentService } from './payment.service';
+import { CacheService } from './cache.service';
 
 // Maximum number of free job posts allowed per employer
 const MAX_FREE_JOB_POSTS = 3;
+
+// Cache TTL in seconds
+const CACHE_TTL = {
+  JOB_LIST: 300, // 5 minutes
+  JOB_DETAIL: 600, // 10 minutes
+  USER_JOBS: 600 // 10 minutes
+};
 
 export class JobService {
   /**
@@ -92,7 +100,19 @@ export class JobService {
       pageSize = '20'
     } = queryParams;
     
-    return await jobRepository.findJobs({
+    // Generate a cache key based on query parameters
+    const cacheKey = `jobs:list:${JSON.stringify({
+      q, type, location, minSalary, maxSalary, active, page, pageSize
+    })}`;
+    
+    // Try to get from cache first
+    const cachedJobs = await CacheService.get(cacheKey);
+    if (cachedJobs) {
+      return cachedJobs;
+    }
+    
+    // If not in cache, fetch from database
+    const jobsResult = await jobRepository.findJobs({
       q: q as string,
       type: type as any,
       location: location as string,
@@ -102,17 +122,35 @@ export class JobService {
       page: parseInt(page as string),
       pageSize: parseInt(pageSize as string)
     });
+    
+    // Store in cache
+    await CacheService.set(cacheKey, jobsResult, CACHE_TTL.JOB_LIST);
+    
+    return jobsResult;
   }
   
   /**
    * Get job by ID
    */
   async getJobById(jobId: string) {
+    // Generate cache key
+    const cacheKey = `jobs:detail:${jobId}`;
+    
+    // Try to get from cache first
+    const cachedJob = await CacheService.get(cacheKey);
+    if (cachedJob) {
+      return cachedJob;
+    }
+    
+    // If not in cache, fetch from database
     const job = await jobRepository.findById(jobId);
     
     if (!job) {
       throw new AppError('Job not found', 404);
     }
+    
+    // Store in cache
+    await CacheService.set(cacheKey, job, CACHE_TTL.JOB_DETAIL);
     
     return job;
   }
@@ -159,37 +197,56 @@ export class JobService {
       salaryMax: salaryMax ? parseInt(salaryMax) : undefined
     });
     
+    // Invalidate related caches
+    await this.invalidateJobCache(jobId, job.postedById);
+    
     return updatedJob;
   }
   
-  /**
-   * Delete job (soft delete)
-   */
-  async deleteJob(jobId: string, userId: string, userRole: string) {
-    // Check if user is authenticated
-    if (!userId) {
-      throw new AppError('User not authenticated', 401);
-    }
-    
-    // Retrieve the job
-    const job = await jobRepository.findById(jobId);
-    
-    if (!job) {
-      throw new AppError('Job not found', 404);
-    }
-    
-    // Check if user is the owner or an admin
-    if (job.postedById !== userId && userRole !== 'ADMIN') {
-      throw new AppError('You are not authorized to delete this job', 403);
-    }
-    
-    // Soft delete the job
-    await jobRepository.softDelete(jobId);
-    
-    return true;
+/**
+ * Delete job (soft delete)
+ */
+async deleteJob(jobId: string, userId: string, userRole: string) {
+  // Check if user is authenticated
+  if (!userId) {
+    throw new AppError('User not authenticated', 401);
   }
   
-  /**
+  // Retrieve the job
+  const job = await jobRepository.findById(jobId);
+  
+  if (!job) {
+    throw new AppError('Job not found', 404);
+  }
+  
+  // Check if user is the owner or an admin
+  if (job.postedById !== userId && userRole !== 'ADMIN') {
+    throw new AppError('You are not authorized to delete this job', 403);
+  }
+  
+  // Soft delete the job
+  await jobRepository.softDelete(jobId);
+  
+  // Invalidate related caches
+  await this.invalidateJobCache(jobId, job.postedById);
+  
+  return true;
+}
+
+/**
+ * Helper method to invalidate job-related cache entries
+ */
+private async invalidateJobCache(jobId: string, userId: string): Promise<void> {
+  // Invalidate specific job cache
+  await CacheService.delete(`jobs:detail:${jobId}`);
+  
+  // Invalidate user's jobs cache
+  await CacheService.delete(`jobs:user:${userId}`);
+  
+  // For job listing we can't know exact keys since they depend on filters
+  // So we'll rely on the TTL to expire those caches naturally
+  // A more advanced approach would be to use Redis SCAN to find and delete pattern matches
+}  /**
    * List jobs posted by a specific user
    */
   async getJobsByUser(userId: string) {
@@ -198,7 +255,22 @@ export class JobService {
       throw new AppError('User not authenticated', 401);
     }
     
+    // Generate cache key
+    const cacheKey = `jobs:user:${userId}`;
+    
+    // Try to get from cache first
+    const cachedJobs = await CacheService.get(cacheKey);
+    if (cachedJobs) {
+      return cachedJobs;
+    }
+    
+    // If not in cache, fetch from database
     const jobs = await jobRepository.findByUserId(userId);
+    
+    // Store in cache
+    await CacheService.set(cacheKey, jobs, CACHE_TTL.USER_JOBS);
+    
+    return jobs;
     
     return jobs;
   }

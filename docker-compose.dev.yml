@@ -4,16 +4,18 @@ services:
   app:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: talenthub-app
     restart: unless-stopped
     ports:
       - "3000:3000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     env_file:
-      - .env.docker
+      - .env
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/talenthub?schema=public
@@ -27,8 +29,22 @@ services:
     networks:
       - talenthub-network
     # Use nodemon for hot-reloading in development
-    # Override the entrypoint to use nodemon directly
-    entrypoint: ["sh", "-c", "./wait-for-it.sh db:5432 -t 60 && ./wait-for-it.sh redis:6379 -t 30 && npx prisma migrate dev && npm run dev"]
+    # Override the entrypoint with a more robust approach
+    entrypoint: >
+      sh -c "
+        for i in $(seq 1 30); do
+          pg_isready -h db -p 5432 -U postgres && break
+          echo 'Waiting for PostgreSQL...' && sleep 2
+        done
+        
+        for i in $(seq 1 15); do
+          if (echo > /dev/tcp/redis/6379) 2>/dev/null; then break; fi
+          echo 'Waiting for Redis...' && sleep 2
+        done
+        
+        npx prisma migrate dev
+        npm run dev
+      "
 
   db:
     image: postgres:15-alpine

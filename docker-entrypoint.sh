@@ -1,11 +1,24 @@
 #!/bin/sh
 set -e
 
-echo "Waiting for PostgreSQL to start..."
-./wait-for-it.sh db:5432 -t 60
+echo "Checking if PostgreSQL is ready..."
+# Try a simpler approach using pg_isready
+for i in $(seq 1 30); do
+  pg_isready -h db -p 5432 -U postgres && break
+  echo "Waiting for PostgreSQL to become available... $i/30"
+  sleep 2
+done
 
-echo "Waiting for Redis to start..."
-./wait-for-it.sh redis:6379 -t 30
+echo "Checking if Redis is ready..."
+# Try a simpler approach using redis-cli ping
+for i in $(seq 1 15); do
+  if (echo > /dev/tcp/redis/6379) >/dev/null 2>&1; then
+    echo "Redis is up!"
+    break
+  fi
+  echo "Waiting for Redis to become available... $i/15"
+  sleep 2
+done
 
 # Run database migrations
 echo "Running database migrations..."

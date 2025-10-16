@@ -1,25 +1,25 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
-# Install dependencies needed for wait-for-it script and build tools
-RUN apk add --no-cache bash curl postgresql-client
+# Install dependencies needed for wait-for-it script, build tools, and native modules
+RUN apk add --no-cache bash curl postgresql-client python3 make g++
 
 # Create app directory
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies and rebuild bcrypt
 COPY package*.json ./
 RUN npm install
+RUN npm rebuild bcrypt --build-from-source
 
 # Generate Prisma client
 COPY prisma ./prisma/
 RUN npx prisma generate
 
-# Copy scripts and make them executable
-COPY wait-for-it.sh docker-entrypoint.sh ./
-RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
-
-# Copy app source
+# Copy app source first
 COPY . .
+
+# Make scripts executable
+RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
 
 # Build the app for production
 RUN npm run build
