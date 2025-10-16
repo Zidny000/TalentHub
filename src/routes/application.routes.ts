@@ -41,4 +41,17 @@ router.get(
   applicationController.exportJobApplications
 );
 
+/**
+ * @route GET /applications/history
+ * @desc Get current user's job application history
+ * @access Private - CANDIDATE only
+ */
+router.get(
+  '/history',
+  authenticate,
+  checkRole(['CANDIDATE', 'ADMIN']),
+  validate(applicationValidators.getApplicationHistory),
+  applicationController.getMyApplicationHistory
+);
+
 export const applicationRoutes = router;

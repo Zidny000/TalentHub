@@ -105,6 +105,29 @@ export class ApplicationController {
       return ResponseFormatter.error(res, 'Failed to export applications', error);
     }
   }
+
+  /**
+   * Get application history for the current user
+   */
+  async getMyApplicationHistory(req: Request, res: Response) {
+    try {
+      const userId = req.user?.userId;
+      const userRole = req.user?.role;
+      
+      // Call application service to get application history
+      const applications = await applicationService.getApplicationHistory(
+        userId as string,
+        userRole as string
+      );
+      
+      return ResponseFormatter.success(res, 'Application history retrieved successfully', applications);
+    } catch (error) {
+      if (error instanceof AppError) {
+        return ResponseFormatter.error(res, error.message, error.errorDetails, error.statusCode);
+      }
+      return ResponseFormatter.error(res, 'Failed to retrieve application history', error);
+    }
+  }
 }
 
 export const applicationController = new ApplicationController();

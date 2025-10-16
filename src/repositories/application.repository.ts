@@ -37,6 +37,44 @@ export class ApplicationRepository {
   }
 
   /**
+   * Find applications by applicant ID (job application history)
+   */
+  async findByApplicantId(applicantId: string) {
+    return prisma.application.findMany({
+      where: { applicantId },
+      include: {
+        job: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            company: true,
+            location: true,
+            type: true,
+            postedAt: true,
+            postedBy: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        },
+        resume: {
+          select: {
+            id: true,
+            title: true,
+            pdfUrl: true
+          }
+        }
+      },
+      orderBy: {
+        appliedAt: 'desc'
+      }
+    });
+  }
+
+  /**
    * Find applications for a specific job
    */
   async findByJobId(jobId: string) {
@@ -63,7 +101,7 @@ export class ApplicationRepository {
   }
 
   /**
-   * Find applications submitted by a specific user
+   * Find applications submitted by a specific user (job application history)
    */
   async findByApplicantId(applicantId: string) {
     return prisma.application.findMany({
@@ -73,8 +111,10 @@ export class ApplicationRepository {
           select: {
             id: true,
             title: true,
+            description: true,
             location: true,
             type: true,
+            createdAt: true,
             postedBy: {
               select: {
                 id: true,
@@ -86,7 +126,8 @@ export class ApplicationRepository {
         resume: {
           select: {
             id: true,
-            title: true
+            title: true,
+            pdfUrl: true
           }
         }
       },

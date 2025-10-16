@@ -28,5 +28,7 @@ export const applicationValidators = {
   exportJobApplications: [
     param('id')
       .isUUID().withMessage('Invalid job ID format')
-  ]
+  ],
+
+  getApplicationHistory: []  // No parameters needed for this endpoint
 };

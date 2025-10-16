@@ -141,6 +141,26 @@ export class ApplicationService {
     
     return process.cwd() + filePath;
   }
+
+  /**
+   * Get application history for a user
+   */
+  async getApplicationHistory(userId: string, userRole: string) {
+    // Check if user is authenticated
+    if (!userId) {
+      throw new AppError('User not authenticated', 401);
+    }
+    
+    // Check if user is a candidate
+    if (userRole !== 'CANDIDATE' && userRole !== 'ADMIN') {
+      throw new AppError('Only candidates can view their application history', 403);
+    }
+    
+    // Get applications by applicant ID
+    const applications = await applicationRepository.findByApplicantId(userId);
+    
+    return applications;
+  }
 }
 
 export const applicationService = new ApplicationService();

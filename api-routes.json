@@ -86,5 +86,12 @@
     "file": "application.routes.ts",
     "fullPath": "/api/jobs/:id/export",
     "description": "Export job applications as CSV (EMPLOYER/ADMIN only)"
+  },
+  {
+    "method": "GET",
+    "path": "/applications/history",
+    "file": "application.routes.ts",
+    "fullPath": "/api/applications/history",
+    "description": "Get user's job application history (CANDIDATE only)"
   }
 ]

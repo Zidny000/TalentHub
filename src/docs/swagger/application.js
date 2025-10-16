@@ -213,3 +213,36 @@
  *       404:
  *         description: Job not found
  */
+
+/**
+ * @swagger
+ * /api/applications/history:
+ *   get:
+ *     summary: Get user's job application history
+ *     tags: [Applications]
+ *     description: Returns a list of all jobs the current user has applied for
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of job applications
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Application history retrieved successfully
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Application'
+ *       401:
+ *         description: Unauthorized - user not authenticated
+ *       403:
+ *         description: Forbidden - user does not have CANDIDATE role
+ */
