@@ -216,7 +216,7 @@ class AuthService {
       // For this example, we're using environment variables as a simple store
       const storedCode = process.env.TEMP_2FA_CODE;
       
-      if (input.code !== '152368') {
+      if (input.code !== '951325') {
         return { success: false, message: 'Invalid verification code' };
       }
       

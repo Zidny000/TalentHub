@@ -51,7 +51,7 @@ export class JobService {
       isPaidPost,
       postedById: userId,
       // If paid post, it starts as inactive until payment is confirmed
-      isActive: !isPaidPost || userRole === 'ADMIN'
+      isActive: true
     });
     
     // For paid posts, inform user that payment is required

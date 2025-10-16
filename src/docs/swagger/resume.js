@@ -258,7 +258,7 @@
  * @swagger
  * /api/resumes/{id}/pdf:
  *   get:
- *     summary: Get resume as PDF
+ *     summary: Get the PDF version of a resume
  *     tags: [Resumes]
  *     security:
  *       - bearerAuth: []
@@ -268,19 +268,25 @@
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: Resume ID
  *     responses:
  *       200:
- *         description: PDF file
+ *         description: PDF file download
  *         content:
  *           application/pdf:
  *             schema:
  *               type: string
  *               format: binary
+ *         headers:
+ *           Content-Disposition:
+ *             schema:
+ *               type: string
+ *               description: Attachment filename
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized - user is not authenticated
  *       403:
- *         description: Forbidden - user does not own this resume
+ *         description: Forbidden - user is not the owner of this resume
  *       404:
  *         description: Resume not found
  */
