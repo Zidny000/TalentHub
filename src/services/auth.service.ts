@@ -137,9 +137,15 @@ class AuthService {
         // Send 2FA code via email
         await send2FAEmail(user.email, twoFactorCode);
 
-        // For this example, we're encoding the verification code in the JWT
-        // In production, store this separately and only include reference in JWT
-        process.env.TEMP_2FA_CODE = twoFactorCode;
+        // Store the 2FA code in Redis cache
+        // Import CacheService here to avoid circular dependencies
+        const { CacheService } = await import('./cache.service');
+        
+        // Generate a cache key for the 2FA code using user email
+        const cacheKey = `2fa:code:${user.email}`;
+        
+        // Store the code with a 10-minute expiration (600 seconds)
+        await CacheService.set(cacheKey, twoFactorCode, 600);
 
         //Exclude passwordHash from user object
         const { passwordHash, ...userWithoutPassword } = user;
@@ -177,9 +183,6 @@ class AuthService {
         token: refreshToken,
         userId: user.id,
         expiresAt: refreshExpiry,
-        // Optional fields for additional security
-        ipAddress: 'user-ip', // In a real app, get from request
-        userAgent: 'user-agent' // In a real app, get from request
       });
 
       //Exclude passwordHash from user object
@@ -211,17 +214,22 @@ class AuthService {
         return { success: false, message: 'User not found' };
       }
       
-      // Verify the 2FA code
-      // In a production system, you'd fetch this from your temporary storage
-      // For this example, we're using environment variables as a simple store
-      const storedCode = process.env.TEMP_2FA_CODE;
+      // Verify the 2FA code using Redis cache
+      // Import CacheService here to avoid circular dependencies
+      const { CacheService } = await import('./cache.service');
       
-      if (input.code !== '951325') {
+      // Generate a cache key for the 2FA code using user email
+      const cacheKey = `2fa:code:${input.email}`;
+      
+      // Get the stored code from cache
+      const storedCode = await CacheService.get<string>(cacheKey);
+
+      if (input.code !== storedCode) {
         return { success: false, message: 'Invalid verification code' };
       }
       
-      // Clear the temporary code
-      delete process.env.TEMP_2FA_CODE;
+      // Delete the temporary code from cache
+      await CacheService.delete(cacheKey);
 
       // Generate access token
       const accessToken = generateAccessToken({
@@ -231,7 +239,7 @@ class AuthService {
       });
 
       // Generate refresh token
-      const { token: refreshToken, tokenId } = generateRefreshToken({
+      const { token: refreshToken } = generateRefreshToken({
         userId: user.id,
         email: user.email,
         tokenType: 'refresh'
@@ -246,9 +254,6 @@ class AuthService {
         token: refreshToken,
         userId: user.id,
         expiresAt: refreshExpiry,
-        // Optional fields for additional security
-        ipAddress: 'user-ip', // In a real app, get from request
-        userAgent: 'user-agent' // In a real app, get from request
       });
 
       const { passwordHash, ...userWithoutPassword } = user;
