@@ -52,6 +52,14 @@ enum InterviewStatus {
   COMPLETED
 }
 
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+  WITHDRAWN
+}
+
 
 // MODELS
 
@@ -75,6 +83,8 @@ model User {
   refreshTokens      RefreshToken[]
   employerInterviews Interview[]      @relation("EmployerInterviews")
   candidateInterviews Interview[]      @relation("CandidateInterviews")
+  employerOffers     JobOffer[]       @relation("EmployerOffers")
+  candidateOffers    JobOffer[]       @relation("CandidateOffers")
 }
 
 model Job {
@@ -113,6 +123,7 @@ model Application {
   applicant      User    @relation("UserApplications", fields: [applicantId], references: [id])
   resume         Resume? @relation(fields: [resumeId], references: [id])
   interviews     Interview[]
+  jobOffers      JobOffer[]
 
   @@index([jobId])           // list all applications for a job
   @@index([applicantId])     // list candidate's applications
@@ -198,8 +209,39 @@ model Interview {
   application     Application    @relation(fields: [applicationId], references: [id])
   employer        User           @relation("EmployerInterviews", fields: [employerId], references: [id])
   candidate       User           @relation("CandidateInterviews", fields: [candidateId], references: [id])
+  jobOffers       JobOffer[]
 
   @@index([applicationId])
+  @@index([employerId])
+  @@index([candidateId])
+}
+
+model JobOffer {
+  id                String       @id @default(uuid())
+  applicationId     String
+  interviewId       String?      // Optional, if the offer is based on an interview
+  employerId        String
+  candidateId       String
+  title             String       // Job title
+  description       String?      // Job description
+  salary            Int          // Annual salary offer
+  benefits          String?      // Benefits description
+  startDate         DateTime?    // Proposed start date
+  expirationDate    DateTime     // Offer valid until
+  status            OfferStatus  @default(PENDING)
+  rejectionReason   String?      // If candidate rejects
+  notes             String?      // Additional notes
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  // Relations
+  application       Application  @relation(fields: [applicationId], references: [id])
+  interview         Interview?   @relation(fields: [interviewId], references: [id])
+  employer          User         @relation("EmployerOffers", fields: [employerId], references: [id])
+  candidate         User         @relation("CandidateOffers", fields: [candidateId], references: [id])
+
+  @@index([applicationId])
+  @@index([interviewId])
   @@index([employerId])
   @@index([candidateId])
 }

@@ -6,6 +6,7 @@ import jobRoutes from './job.routes';
 import { applicationRoutes } from './application.routes';
 import { paymentRoutes } from './payment.routes';
 import { interviewRoutes } from './interview.routes';
+import { jobOfferRoutes } from './jobOffer.routes';
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.use('/resumes', resumeRoutes);
 router.use('/jobs', jobRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/interviews', interviewRoutes); // Interview routes
+router.use('/job-offers', jobOfferRoutes); // Job offer routes
 router.use('/', applicationRoutes); // Application routes (some nested under /jobs)
 
 export default router;

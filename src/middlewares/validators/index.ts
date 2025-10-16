@@ -41,5 +41,7 @@ export const loginValidation = [
 // Export validators
 export { resumeValidators };
 export { jobValidators };
+export { interviewValidators };
 export { applicationValidators } from './application.validators';
 export { paymentValidators } from './payment.validators';
+export { jobOfferValidators } from './jobOffer.validators';
