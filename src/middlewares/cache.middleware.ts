@@ -4,6 +4,7 @@ import { CacheService } from '../services/cache.service';
 interface CacheOptions {
   ttl?: number; // Time to live in seconds
   keyPrefix?: string; // Prefix for the cache key
+  includeUserId?: boolean; // Whether to include userId in the cache key
 }
 
 /**
@@ -21,7 +22,12 @@ export const cacheMiddleware = (options: CacheOptions = {}) => {
     }
 
     // Generate cache key from URL and query params
-    const cacheKey = `${keyPrefix}:${req.originalUrl}`;
+    let cacheKey = `${keyPrefix}:${req.originalUrl}`;
+    
+    // Include userId in cache key for user-specific data if option is set
+    if (options.includeUserId && req.user && req.user.userId) {
+      cacheKey = `${keyPrefix}:user:${req.user.userId}:${req.originalUrl}`;
+    }
     
     try {
       // Try to get from cache

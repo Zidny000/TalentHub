@@ -237,15 +237,19 @@ async deleteJob(jobId: string, userId: string, userRole: string) {
  * Helper method to invalidate job-related cache entries
  */
 private async invalidateJobCache(jobId: string, userId: string): Promise<void> {
-  // Invalidate specific job cache
-  await CacheService.delete(`jobs:detail:${jobId}`);
-  
-  // Invalidate user's jobs cache
-  await CacheService.delete(`jobs:user:${userId}`);
-  
-  // For job listing we can't know exact keys since they depend on filters
-  // So we'll rely on the TTL to expire those caches naturally
-  // A more advanced approach would be to use Redis SCAN to find and delete pattern matches
+  try {
+    // Invalidate specific job cache
+    await CacheService.delete(`jobs:detail:${jobId}`);
+    
+    // Invalidate user's jobs cache
+    await CacheService.delete(`jobs:user:${userId}`);
+    
+    // Clear job listing caches based on pattern
+    await CacheService.deleteByPattern('jobs:list:*');
+  } catch (error) {
+    // Log error but don't interrupt the flow for cache issues
+    console.error('Error invalidating job caches:', error);
+  }
 }  /**
    * List jobs posted by a specific user
    */

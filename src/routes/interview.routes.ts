@@ -3,6 +3,7 @@ import { interviewController } from '../controllers/interview.controller';
 import { authenticate, checkRole } from '../middlewares/auth.middleware';
 import { validate } from '../middlewares/validation.middleware';
 import { interviewValidators } from '../middlewares/validators/interview.validators';
+import { cacheMiddleware } from '../middlewares/cache.middleware';
 
 const router = express.Router();
 
@@ -10,10 +11,16 @@ const router = express.Router();
 router.use(authenticate);
 
 // Get interviews for logged-in user
-router.get('/', interviewController.getMyInterviews);
+router.get('/', 
+  cacheMiddleware({ ttl: 300, keyPrefix: 'interviews', includeUserId: true }), 
+  interviewController.getMyInterviews
+);
 
 // Get specific interview details
-router.get('/:id', interviewController.getInterview);
+router.get('/:id', 
+  cacheMiddleware({ ttl: 600, keyPrefix: 'interviews:detail' }), 
+  interviewController.getInterview
+);
 
 // Update interview details (mainly for rescheduling)
 router.patch(
@@ -47,6 +54,7 @@ router.post(
 // Get interviews for a specific application
 router.get(
   '/application/:applicationId',
+  cacheMiddleware({ ttl: 300, keyPrefix: 'interviews:application' }),
   interviewController.getApplicationInterviews
 );
 

@@ -1,6 +1,14 @@
 import { interviewRepository } from '../repositories/interview.repository';
 import { applicationRepository } from '../repositories/application.repository';
+import { CacheService } from './cache.service';
 import { AppError } from '../utils/errors';
+
+// Cache TTL in seconds
+const CACHE_TTL = {
+  INTERVIEW_LIST: 300, // 5 minutes
+  INTERVIEW_DETAIL: 600, // 10 minutes
+  APPLICATION_INTERVIEWS: 300 // 5 minutes
+};
 
 export class InterviewService {
   /**
@@ -140,7 +148,12 @@ export class InterviewService {
       updateData.status = 'RESCHEDULED';
     }
 
-    return interviewRepository.update(id, updateData);
+    const updatedInterview = await interviewRepository.update(id, updateData);
+    
+    // Invalidate cache for this interview and related caches
+    await this.invalidateInterviewCache(id, interview.employerId, interview.candidateId, interview.applicationId);
+    
+    return updatedInterview;
   }
 
   /**
@@ -169,7 +182,12 @@ export class InterviewService {
       updateData.feedback = reason;
     }
 
-    return interviewRepository.update(id, updateData);
+    const updatedInterview = await interviewRepository.update(id, updateData);
+    
+    // Invalidate cache for this interview and related caches
+    await this.invalidateInterviewCache(id, interview.employerId, interview.candidateId, interview.applicationId);
+    
+    return updatedInterview;
   }
 
   /**
@@ -196,7 +214,37 @@ export class InterviewService {
       updateData.feedback = feedback;
     }
 
-    return interviewRepository.update(id, updateData);
+    const updatedInterview = await interviewRepository.update(id, updateData);
+    
+    // Invalidate cache for this interview and related caches
+    await this.invalidateInterviewCache(id, interview.employerId, interview.candidateId, interview.applicationId);
+    
+    return updatedInterview;
+  }
+  
+  /**
+   * Helper method to invalidate interview-related cache entries
+   */
+  private async invalidateInterviewCache(
+    interviewId: string, 
+    employerId: string, 
+    candidateId: string, 
+    applicationId: string
+  ): Promise<void> {
+    try {
+      // Invalidate specific interview cache
+      await CacheService.delete(`interviews:detail:${interviewId}`);
+      
+      // Invalidate user's interviews caches (both employer and candidate)
+      await CacheService.delete(`interviews:user:${employerId}`);
+      await CacheService.delete(`interviews:user:${candidateId}`);
+      
+      // Invalidate application's interviews cache
+      await CacheService.delete(`interviews:application:${applicationId}`);
+    } catch (error) {
+      // Log error but don't interrupt the flow for cache issues
+      console.error('Error invalidating interview caches:', error);
+    }
   }
 }
 

@@ -3,6 +3,7 @@ import { applicationController } from '../controllers/application.controller';
 import { authenticate, checkRole } from '../middlewares/auth.middleware';
 import { validate } from '../middlewares/validation.middleware';
 import { applicationValidators } from '../middlewares/validators';
+import { cacheMiddleware } from '../middlewares/cache.middleware';
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.get(
   '/jobs/:id/applications',
   checkRole(['EMPLOYER', 'ADMIN']), // ADMIN can also access all applications
   validate(applicationValidators.getJobApplications),
+  cacheMiddleware({ ttl: 300, keyPrefix: 'applications:job' }),
   applicationController.getJobApplications
 );
 
@@ -29,6 +31,7 @@ router.get(
 router.get(
   '/applications/:id',
   validate(applicationValidators.getApplicationDetails),
+  cacheMiddleware({ ttl: 600, keyPrefix: 'applications:detail' }),
   applicationController.getApplicationDetails
 );
 
@@ -47,6 +50,7 @@ router.get(
   authenticate,
   checkRole(['CANDIDATE', 'ADMIN']),
   validate(applicationValidators.getApplicationHistory),
+  cacheMiddleware({ ttl: 600, keyPrefix: 'applications', includeUserId: true }),
   applicationController.getMyApplicationHistory
 );
 

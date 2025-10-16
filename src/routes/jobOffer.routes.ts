@@ -4,6 +4,7 @@ import { jobOfferController } from '../controllers/jobOffer.controller';
 import { authenticate as auth } from '../middlewares/auth.middleware';
 import { validate } from '../middlewares/validation.middleware';
 import { jobOfferValidators } from '../middlewares/validators/jobOffer.validators';
+import { cacheMiddleware } from '../middlewares/cache.middleware';
 
 const router = express.Router();
 
@@ -11,12 +12,16 @@ const router = express.Router();
 router.use(auth);
 
 // Get job offers for logged-in user
-router.get('/', jobOfferController.getMyJobOffers);
+router.get('/',
+  cacheMiddleware({ ttl: 300, keyPrefix: 'jobOffers', includeUserId: true }),
+  jobOfferController.getMyJobOffers
+);
 
 // Get specific job offer details
 router.get(
   '/:id',
   validate(jobOfferValidators.jobOfferId),
+  cacheMiddleware({ ttl: 600, keyPrefix: 'jobOffers:detail' }),
   jobOfferController.getJobOffer
 );
 
@@ -55,6 +60,7 @@ router.post(
 router.get(
   '/application/:applicationId',
   validate(jobOfferValidators.applicationId),
+  cacheMiddleware({ ttl: 300, keyPrefix: 'jobOffers:application' }),
   jobOfferController.getApplicationJobOffers
 );
 

@@ -3,6 +3,7 @@ import { resumeController } from '../controllers/resume.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 import { validate } from '../middlewares/validation.middleware';
 import { resumeValidators } from '../middlewares/validators';
+import { cacheMiddleware } from '../middlewares/cache.middleware';
 
 const router = Router();
 
@@ -13,13 +14,22 @@ router.use(authenticate);
 router.post('/', validate(resumeValidators.createResume), resumeController.create.bind(resumeController));
 
 // Get all resumes for the current user
-router.get('/my-resumes', resumeController.getByUserId.bind(resumeController));
+router.get('/my-resumes', 
+  cacheMiddleware({ ttl: 600, keyPrefix: 'resumes', includeUserId: true }), 
+  resumeController.getByUserId.bind(resumeController)
+);
 
 // Get a specific resume by ID
-router.get('/:id', resumeController.getById.bind(resumeController));
+router.get('/:id', 
+  cacheMiddleware({ ttl: 600, keyPrefix: 'resumes:detail' }), 
+  resumeController.getById.bind(resumeController)
+);
 
 // Get resume as PDF
-router.get('/:id/pdf', resumeController.getPdf.bind(resumeController));
+router.get('/:id/pdf',
+  cacheMiddleware({ ttl: 3600, keyPrefix: 'resumes:pdf' }), // PDF can be cached longer
+  resumeController.getPdf.bind(resumeController)
+);
 
 // Update a resume
 router.put('/:id', validate(resumeValidators.updateResume), resumeController.update.bind(resumeController));

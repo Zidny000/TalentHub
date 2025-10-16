@@ -5,6 +5,32 @@ import logger from '../utils/logger';
  * Cache service for Redis operations
  */
 export class CacheService {
+  
+  /**
+   * Delete all keys matching a pattern
+   * @param pattern - Pattern to match keys (e.g. 'jobs:*')
+   */
+  static async deleteByPattern(pattern: string): Promise<void> {
+    try {
+      const redis = getRedisClient();
+      
+      // Use SCAN to get keys matching the pattern
+      let cursor = '0';
+      do {
+        // Get a batch of keys using SCAN
+        const [nextCursor, keys] = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', '100');
+        cursor = nextCursor;
+        
+        // Delete found keys if any
+        if (keys.length > 0) {
+          await redis.del(...keys);
+        }
+      } while (cursor !== '0'); // Continue until cursor returns to 0
+    } catch (error) {
+      logger.error(`Error deleting cache for pattern ${pattern}:`, error);
+      throw error;
+    }
+  }
   /**
    * Set a value in the cache
    * @param key - Cache key
@@ -107,6 +133,22 @@ export class CacheService {
       await redis.flushall();
     } catch (error) {
       logger.error('Error clearing cache:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Delete multiple cache keys at once
+   * @param keys - Array of cache keys to delete
+   */
+  static async deleteMultiple(keys: string[]): Promise<void> {
+    try {
+      if (!keys.length) return;
+      
+      const redis = getRedisClient();
+      await redis.del(...keys);
+    } catch (error) {
+      logger.error(`Error deleting multiple cache keys:`, error);
       throw error;
     }
   }
