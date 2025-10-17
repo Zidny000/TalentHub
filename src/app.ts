@@ -10,8 +10,6 @@ import path from 'path';
 // Create Express application
 const app: Application = express();
 
-
-
 // Enable CORS for all routes
 app.use(cors({
   origin: function(origin, callback) {

@@ -290,6 +290,35 @@ For authenticated endpoints, use the "Authorize" button and enter your JWT token
 Bearer your_jwt_token_here
 ```
 
+## Postman Collection
+
+TalentHub provides a Postman collection for testing and exploring the API. This collection includes all API endpoints, organized by resource, with pre-configured requests and environment variables.
+
+### Generating the Postman Collection
+
+There are two ways to generate the Postman collection:
+
+1. **Generate from actual routes (Recommended):**
+   ```bash
+   npm run postman-from-routes
+   ```
+   This scans your route files and creates a collection based on the actual endpoints. The collection is automatically in sync with your code and updates when new routes are added.
+
+2. **Generate the static collection:**
+   ```bash
+   npm run generate-postman
+   ```
+
+Both commands create a `postman_collection.json` file in the root directory of the project.
+
+### Using the Postman Collection
+
+1. Import the generated `postman_collection.json` file into Postman
+2. The collection includes environment variables for managing authentication tokens
+3. Follow the authentication flow: register, verify email, login, and then access protected resources
+
+For detailed instructions on using the Postman collection, including authentication flows, environment setup, and troubleshooting, see the [Postman Guide](docs/postman-guide.md).
+
 ## CI/CD Pipeline
 
 This project uses GitHub Actions for CI/CD pipeline integration with Render deployment:

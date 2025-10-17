@@ -3,15 +3,15 @@
     "name": "TalentHub API",
     "description": "API collection for TalentHub authentication workflows",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "b5f39050-0e51-49c7-87c9-b0354be4eef9"
+    "_postman_id": "e26c7c44-d32e-4c47-a1e2-c77608bd3435"
   },
   "item": [
     {
-      "name": "Auth",
-      "description": "API endpoints for auth",
+      "name": "Authentication",
+      "description": "API endpoints for user authentication",
       "item": [
         {
-          "name": "POST Register",
+          "name": "Register",
           "request": {
             "method": "POST",
             "header": [
@@ -20,19 +20,6 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "http://localhost:3000/api/register",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "register"
-              ]
-            },
-            "description": "POST request to /api/register",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"securePassword123!\"\n}",
@@ -41,23 +28,9 @@
                   "language": "json"
                 }
               }
-            }
-          },
-          "response": [],
-          "_postman_id": "7a64d389-97fe-490d-90c7-f45cc164ed4c"
-        },
-        {
-          "name": "GET Verify email",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            },
             "url": {
-              "raw": "http://localhost:3000/api/verify-email?token={{emailToken}}",
+              "raw": "http://localhost:3000/api/auth/register",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -65,6 +38,30 @@
               "port": "3000",
               "path": [
                 "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new user"
+          },
+          "response": [],
+          "_postman_id": "8185b5fe-00c5-4113-bfe7-9471099418ff"
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/verify-email?token={{emailToken}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
                 "verify-email"
               ],
               "query": [
@@ -74,13 +71,13 @@
                 }
               ]
             },
-            "description": "GET request to /api/verify-email"
+            "description": "Verify user email with token"
           },
           "response": [],
-          "_postman_id": "eeaedf5b-c972-4aaa-82de-ac673f58c398"
+          "_postman_id": "e6f416a8-fb91-402c-bdd6-249f024eee4d"
         },
         {
-          "name": "POST Login",
+          "name": "Login",
           "request": {
             "method": "POST",
             "header": [
@@ -89,19 +86,6 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "http://localhost:3000/api/login",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "login"
-              ]
-            },
-            "description": "POST request to /api/login",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securePassword123!\"\n}",
@@ -110,13 +94,27 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login with email and password"
           },
           "response": [],
-          "_postman_id": "cea1267b-cb34-4745-8542-4a10b04783e5"
+          "_postman_id": "a0540922-11bf-4aa5-a63b-ac0478ab2678"
         },
         {
-          "name": "POST Verify 2fa",
+          "name": "Verify 2FA",
           "request": {
             "method": "POST",
             "header": [
@@ -125,19 +123,6 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "http://localhost:3000/api/verify-2fa",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "verify-2fa"
-              ]
-            },
-            "description": "POST request to /api/verify-2fa",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"john@example.com\",\n  \"code\": \"123456\"\n}",
@@ -146,13 +131,27 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/verify-2fa",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "verify-2fa"
+              ]
+            },
+            "description": "Verify 2FA code"
           },
           "response": [],
-          "_postman_id": "1528b66b-b161-4e09-a0aa-35da6b5f1e97"
+          "_postman_id": "6fa6575e-64f3-42d6-a336-51cc2b6e2ad7"
         },
         {
-          "name": "POST Refresh",
+          "name": "Refresh Token",
           "request": {
             "method": "POST",
             "header": [
@@ -161,8 +160,17 @@
                 "value": "application/json"
               }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "http://localhost:3000/api/refresh",
+              "raw": "http://localhost:3000/api/auth/refresh",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -170,25 +178,17 @@
               "port": "3000",
               "path": [
                 "api",
+                "auth",
                 "refresh"
               ]
             },
-            "description": "POST request to /api/refresh",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
+            "description": "Refresh access token"
           },
           "response": [],
-          "_postman_id": "d3fbf69b-40f4-4fc0-9d82-c98ced86f79f"
+          "_postman_id": "300f8bb4-89e6-417c-a742-8676b6c1c1d3"
         },
         {
-          "name": "POST Logout",
+          "name": "Logout",
           "request": {
             "method": "POST",
             "header": [
@@ -197,19 +197,6 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "http://localhost:3000/api/logout",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "logout"
-              ]
-            },
-            "description": "POST request to /api/logout",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
@@ -218,13 +205,27 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Logout user (revoke refresh token)"
           },
           "response": [],
-          "_postman_id": "16868b06-38fc-4dd5-a3bd-c99f7cd3ac22"
+          "_postman_id": "8012f043-3b8d-49af-8709-63aaf3356adc"
         },
         {
-          "name": "POST Logout all",
+          "name": "Logout All Devices",
           "request": {
             "method": "POST",
             "header": [
@@ -238,7 +239,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:3000/api/logout-all",
+              "raw": "http://localhost:3000/api/auth/logout-all",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -246,42 +247,29 @@
               "port": "3000",
               "path": [
                 "api",
+                "auth",
                 "logout-all"
               ]
             },
-            "description": "POST request to /api/logout-all",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
+            "description": "Logout from all devices"
           },
           "response": [],
-          "_postman_id": "e39aa791-a842-49fa-a351-e793736245d0"
+          "_postman_id": "9cd6eebd-9d9c-433f-93ae-243a6259abeb"
         }
       ],
-      "_postman_id": "38e9006d-aeac-48aa-b77d-f68c108d49c2"
+      "_postman_id": "bfe316a4-66f8-4bf6-aa60-5b3bc9f1bcbd"
     },
     {
-      "name": "Email-test",
-      "description": "API endpoints for email-test",
+      "name": "Email Testing",
+      "description": "API endpoints for testing email functionality",
       "item": [
         {
-          "name": "GET Show verification",
+          "name": "Show Email Verification Page",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
-              "raw": "http://localhost:3000/api/show-verification?token={{emailToken}}",
+              "raw": "http://localhost:3000/api/email-test/show-verification?token={{emailToken}}",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -289,6 +277,7 @@
               "port": "3000",
               "path": [
                 "api",
+                "email-test",
                 "show-verification"
               ],
               "query": [
@@ -298,23 +287,18 @@
                 }
               ]
             },
-            "description": "GET request to /api/show-verification"
+            "description": "Show email verification page (for testing)"
           },
           "response": [],
-          "_postman_id": "e99686e8-fb1e-431a-9c78-6c9865b5a16d"
+          "_postman_id": "a964139a-b4a5-401f-957a-1b2ecbf0974c"
         },
         {
-          "name": "GET Process verification",
+          "name": "Process Email Verification",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
-              "raw": "http://localhost:3000/api/process-verification?token={{emailToken}}",
+              "raw": "http://localhost:3000/api/email-test/process-verification?token={{emailToken}}",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -322,6 +306,7 @@
               "port": "3000",
               "path": [
                 "api",
+                "email-test",
                 "process-verification"
               ],
               "query": [
@@ -331,13 +316,13 @@
                 }
               ]
             },
-            "description": "GET request to /api/process-verification"
+            "description": "Process email verification (for testing)"
           },
           "response": [],
-          "_postman_id": "d621c972-15ad-4deb-a353-dcfda6f8592b"
+          "_postman_id": "ba3122e6-f23b-4e9d-93c2-28a958283ffc"
         },
         {
-          "name": "POST View email content",
+          "name": "View Email Content",
           "request": {
             "method": "POST",
             "header": [
@@ -346,19 +331,6 @@
                 "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "http://localhost:3000/api/view-email-content",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "view-email-content"
-              ]
-            },
-            "description": "POST request to /api/view-email-content",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"test@example.com\"\n}",
@@ -367,13 +339,27 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/email-test/view-email-content",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "email-test",
+                "view-email-content"
+              ]
+            },
+            "description": "View email content without sending (for testing)"
           },
           "response": [],
-          "_postman_id": "6004681f-20d3-4a44-8079-b302c8c8c81d"
+          "_postman_id": "8bfa0528-28c3-4beb-8c6a-7dd721d35801"
         }
       ],
-      "_postman_id": "cadddabd-fd80-4486-b50b-997970e8eca0"
+      "_postman_id": "8cbd7cd8-42fa-44c1-908b-cb8e1a7a3c1c"
     }
   ],
   "event": [],

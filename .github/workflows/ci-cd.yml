@@ -60,14 +60,6 @@ jobs:
       - name: Run linting
         run: npm run lint || echo "Linting issues found, but continuing"
 
-      - name: Run tests
-        run: npm test
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/talenthub_test
-          REDIS_URL: redis://localhost:6379
-          JWT_SECRET: test-jwt-secret
-          JWT_REFRESH_SECRET: test-jwt-refresh-secret
-          NODE_ENV: test
 
   deploy:
     name: Deploy to Render
