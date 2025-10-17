@@ -39,6 +39,10 @@ TalentHub uses a comprehensive relational database with the following core model
 - **Payment**: Payment processing for job postings
 - **EmploymentPayment**: Salary and compensation payments
 
+### Database Diagram
+
+![TalentHub Database Schema](./talenthubdb-diagram.png)
+
 For complete schema details, see the [Prisma Schema](./prisma/schema.prisma).
 
 ## API Endpoints
