@@ -19,6 +19,10 @@ const swaggerDefinition = {
       description: 'Production server',
     },
     {
+      url: 'https://talenthub-1-1q5v.onrender.com',
+      description: 'Docker server',
+    },
+    {
       url: 'http://localhost:3000',
       description: 'Development server',
     },
