@@ -1,7 +1,7 @@
 import express from 'express';
 import { param } from 'express-validator';
 import { jobOfferController } from '../controllers/jobOffer.controller';
-import { authenticate as auth } from '../middlewares/auth.middleware';
+import { authenticate } from '../middlewares/auth.middleware';
 import { validate } from '../middlewares/validation.middleware';
 import { jobOfferValidators } from '../middlewares/validators/jobOffer.validators';
 import { cacheMiddleware } from '../middlewares/cache.middleware';
@@ -9,7 +9,7 @@ import { cacheMiddleware } from '../middlewares/cache.middleware';
 const router = express.Router();
 
 // Protected routes - require authentication
-router.use(auth);
+router.use(authenticate);
 
 // Get job offers for logged-in user
 router.get('/',

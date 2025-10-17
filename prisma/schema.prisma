@@ -39,6 +39,13 @@ enum PaymentStatus {
   FAILED
 }
 
+enum EmploymentPaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
 enum TwoFactorMethod {
   EMAIL
   SMS
@@ -93,6 +100,8 @@ model User {
   candidateOffers    JobOffer[]       @relation("CandidateOffers")
   sentMessages       Message[]        @relation("SentMessages")
   receivedMessages   Message[]        @relation("ReceivedMessages")
+  sentEmploymentPayments    EmploymentPayment[] @relation("SentEmploymentPayments")
+  receivedEmploymentPayments EmploymentPayment[] @relation("ReceivedEmploymentPayments")
 }
 
 model Job {
@@ -246,7 +255,8 @@ model JobOffer {
   application       Application  @relation(fields: [applicationId], references: [id])
   interview         Interview?   @relation(fields: [interviewId], references: [id])
   employer          User         @relation("EmployerOffers", fields: [employerId], references: [id])
-  candidate         User         @relation("CandidateOffers", fields: [candidateId], references: [id])
+  candidate       User         @relation("CandidateOffers", fields: [candidateId], references: [id])
+  employmentPayments EmploymentPayment[]
 
   @@index([applicationId])
   @@index([interviewId])
@@ -271,4 +281,29 @@ model Message {
   @@index([senderId])
   @@index([receiverId])
   @@index([createdAt]) // For efficient message history retrieval
+}
+
+model EmploymentPayment {
+  id              String                @id @default(uuid())
+  employerId      String
+  candidateId     String
+  jobOfferId      String
+  amount          Int
+  description     String?
+  currency        String                @default("USD")
+  provider        String
+  stripeSessionId String?
+  status          EmploymentPaymentStatus @default(PENDING)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  // Relations
+  employer        User                  @relation("SentEmploymentPayments", fields: [employerId], references: [id])
+  candidate       User                  @relation("ReceivedEmploymentPayments", fields: [candidateId], references: [id])
+  jobOffer        JobOffer              @relation(fields: [jobOfferId], references: [id])
+
+  @@index([employerId])
+  @@index([candidateId])
+  @@index([jobOfferId])
+  @@index([status])
 }

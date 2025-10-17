@@ -101,16 +101,38 @@ export class PaymentService {
       switch (event.type) {
         case 'checkout.session.completed': {
           const session = event.data.object as Stripe.Checkout.Session;
-          await this.handleSuccessfulPayment(
-            session.metadata?.userId as string,
-            session.metadata?.jobId as string
-          );
+          
+          // Determine payment type and handle accordingly
+          const paymentType = session.metadata?.paymentType;
+          
+          if (paymentType === 'employment') {
+            // This is an employment payment from employer to candidate
+            const { employmentPaymentService } = require('./employmentPayment.service');
+            await employmentPaymentService.handleSuccessfulEmploymentPayment(session.id);
+          } else {
+            // This is a regular job posting payment
+            await this.handleSuccessfulPayment(
+              session.metadata?.userId as string,
+              session.metadata?.jobId as string
+            );
+          }
           break;
         }
         
         case 'charge.failed': {
           const charge = event.data.object as Stripe.Charge;
-          if (charge.metadata?.jobId) {
+          
+          // Check payment type from metadata
+          const paymentType = charge.metadata?.paymentType;
+          
+          if (paymentType === 'employment' && charge.metadata?.sessionId) {
+            // Handle failed employment payment
+            const { employmentPaymentService } = require('./employmentPayment.service');
+            await employmentPaymentService.handleFailedEmploymentPayment(
+              charge.metadata.sessionId
+            );
+          } else if (charge.metadata?.jobId) {
+            // Handle failed job posting payment
             await this.handleFailedPayment(
               charge.metadata?.userId as string,
               charge.metadata?.jobId as string

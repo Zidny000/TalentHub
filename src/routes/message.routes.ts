@@ -10,11 +10,7 @@ import {
 
 const router = Router();
 
-/**
- * @route   POST /api/messages
- * @desc    Send a message to another user
- * @access  Private
- */
+// Private - Send a message to another user
 router.post(
   '/',
   authenticate,
@@ -23,11 +19,8 @@ router.post(
   messageController.sendMessage
 );
 
-/**
- * @route   GET /api/messages/conversation/:userId
- * @desc    Get conversation history with another user
- * @access  Private
- */
+
+// Private -Get conversation history with another user
 router.get(
   '/conversation/:userId',
   authenticate,
@@ -36,22 +29,17 @@ router.get(
   messageController.getConversation
 );
 
-/**
- * @route   GET /api/messages/conversations
- * @desc    Get all user conversations
- * @access  Private
- */
+
+// Private - Get all user conversations
 router.get(
   '/conversations',
   authenticate,
   messageController.getUserConversations
 );
 
-/**
- * @route   PUT /api/messages/read/:senderId
- * @desc    Mark messages from a specific user as read
- * @access  Private
- */
+
+// Private - Mark messages from a specific user as read
+
 router.put(
   '/read/:senderId',
   authenticate,
@@ -60,11 +48,7 @@ router.put(
   messageController.markAsRead
 );
 
-/**
- * @route   GET /api/messages/unread/count
- * @desc    Get count of unread messages
- * @access  Private
- */
+// Private - Get count of unread messages
 router.get(
   '/unread/count',
   authenticate,
