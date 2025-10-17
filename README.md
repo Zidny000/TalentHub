@@ -271,25 +271,6 @@ For both Docker environments, ensure your `.env` file contains the necessary var
    - Username: postgres
    - Password: postgres
 
-## API Documentation with Swagger
-
-The TalentHub API is fully documented using Swagger/OpenAPI. To access the interactive documentation:
-
-1. Start the application (locally or via Docker)
-2. Navigate to `http://localhost:3000/api-docs` in your browser
-3. You'll see the interactive Swagger UI with all available endpoints
-4. Endpoints are grouped by tags (auth, jobs, applications, etc.)
-5. You can:
-   - Expand each endpoint to see details (parameters, request body schema, responses)
-   - Try out endpoints directly from the UI (authenticate first for protected routes)
-   - View model schemas and data structures
-   - Download the OpenAPI specification
-
-For authenticated endpoints, use the "Authorize" button and enter your JWT token in the format:
-```
-Bearer your_jwt_token_here
-```
-
 ## Postman Collection
 
 TalentHub provides a Postman collection for testing and exploring the API. This collection includes all API endpoints, organized by resource, with pre-configured requests and environment variables.
@@ -318,6 +299,25 @@ Both commands create a `postman_collection.json` file in the root directory of t
 3. Follow the authentication flow: register, verify email, login, and then access protected resources
 
 For detailed instructions on using the Postman collection, including authentication flows, environment setup, and troubleshooting, see the [Postman Guide](docs/postman-guide.md).
+
+## API Documentation with Swagger
+
+The TalentHub API is fully documented using Swagger/OpenAPI. To access the interactive documentation:
+
+1. Start the application (locally or via Docker)
+2. Navigate to `http://localhost:3000/api-docs` in your browser
+3. You'll see the interactive Swagger UI with all available endpoints
+4. Endpoints are grouped by tags (auth, jobs, applications, etc.)
+5. You can:
+   - Expand each endpoint to see details (parameters, request body schema, responses)
+   - Try out endpoints directly from the UI (authenticate first for protected routes)
+   - View model schemas and data structures
+   - Download the OpenAPI specification
+
+For authenticated endpoints, use the "Authorize" button and enter your JWT token in the format:
+```
+Bearer your_jwt_token_here
+```
 
 ## CI/CD Pipeline
 

@@ -19,3 +19,6 @@ RUN npx prisma generate
 COPY . .
 
 EXPOSE 3000
+
+# Start the application using the dev script
+CMD ["npm", "start"]

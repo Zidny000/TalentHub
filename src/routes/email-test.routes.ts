@@ -81,10 +81,10 @@ router.get('/show-verification', async (req: Request, res: Response) => {
             
             <h2>Verify Email</h2>
             <p>Click the button below to verify your email (this simulates a user clicking the link in their email):</p>
-            <a class="button" href="/api/email-test/process-verification?token=${token}">Verify Email</a>
+            <a class="button" href="/api/v1/email-test/process-verification?token=${token}">Verify Email</a>
             
             <p>Alternatively, you can use the normal API endpoint:</p>
-            <code>GET /api/auth/verify-email?token=${token}</code>
+            <code>GET /api/v1/auth/verify-email?token=${token}</code>
           </div>
         </body>
       </html>
