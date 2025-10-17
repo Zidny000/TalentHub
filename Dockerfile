@@ -1,7 +1,7 @@
 FROM node:20-alpine
 
 # Install dependencies needed for wait-for-it script, build tools, and native modules
-RUN apk add --no-cache bash curl postgresql-client python3 make g++
+RUN apk add --no-cache bash curl postgresql-client python3 make g++ netcat-openbsd redis
 
 # Create app directory
 WORKDIR /app
@@ -18,11 +18,13 @@ RUN npx prisma generate
 # Copy app source first
 COPY . .
 
-# Make scripts executable
+# Copy scripts
+COPY wait-for-it.sh docker-entrypoint.sh ./
 RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
 
 # Build the app for production
 RUN npm run build
+RUN npm run serve
 
 EXPOSE 3000
 

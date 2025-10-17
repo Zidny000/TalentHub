@@ -25,26 +25,10 @@ services:
       - /app/node_modules
       - ./uploads:/app/uploads
       - ./logs:/app/logs
-    command: npm run dev
     networks:
       - talenthub-network
-    # Use nodemon for hot-reloading in development
-    # Override the entrypoint with a more robust approach
-    entrypoint: >
-      sh -c "
-        for i in $(seq 1 30); do
-          pg_isready -h db -p 5432 -U postgres && break
-          echo 'Waiting for PostgreSQL...' && sleep 2
-        done
-        
-        for i in $(seq 1 15); do
-          if (echo > /dev/tcp/redis/6379) 2>/dev/null; then break; fi
-          echo 'Waiting for Redis...' && sleep 2
-        done
-        
-        npx prisma migrate dev
-        npm run dev
-      "
+    # Use a custom entrypoint script for development
+    entrypoint: ["./docker-entrypoint.sh"]
 
   db:
     image: postgres:15-alpine
@@ -76,10 +60,11 @@ services:
       - redis_data:/data
     command: redis-server --appendonly yes
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 10s
     networks:
       - talenthub-network
 

@@ -1,7 +1,7 @@
 FROM node:20-alpine
 
 # Install dependencies needed for development and native modules
-RUN apk add --no-cache bash curl postgresql-client python3 make g++
+RUN apk add --no-cache bash curl postgresql-client python3 make g++ netcat-openbsd redis
 
 # Create app directory
 WORKDIR /app
@@ -21,7 +21,7 @@ COPY prisma ./prisma/
 # Generate Prisma client
 RUN npx prisma generate
 
-# Copy wait scripts
+# Copy scripts
 COPY wait-for-it.sh docker-entrypoint.sh ./
 RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
 
