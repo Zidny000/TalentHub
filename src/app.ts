@@ -11,9 +11,13 @@ import path from 'path';
 const app: Application = express();
 
 app.use(cors({
-        origin: ["https://talenthub-2mnv.onrender.com", "http://localhost:3000"],
-    }
-))
+  origin: [
+    'https://talenthub-2mnv.onrender.com',
+    'https://talenthub-api.onrender.com',
+    'http://localhost:3000',
+  ],
+  credentials: true,
+}));
 app.options('*', cors())
 
 // Special route for Stripe webhooks (needs raw body)
