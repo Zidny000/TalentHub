@@ -4,7 +4,7 @@
   "description": "This is an assessment project.",
   "main": "server.ts",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "NODE_OPTIONS='--max-old-space-size=512' ts-node src/server.ts",
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "NODE_OPTIONS='--max-old-space-size=512' tsc",
     "serve": "node dist/server.js",

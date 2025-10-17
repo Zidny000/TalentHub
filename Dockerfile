@@ -21,5 +21,4 @@ COPY . .
 EXPOSE 3000
 
 # Start the application using the dev script
-CMD ["npm", "build"]
-CMD ["npm", "run", "serve"]
+CMD ["npm", "start"]
