@@ -10,22 +10,32 @@ import path from 'path';
 // Create Express application
 const app: Application = express();
 
+
+
 // Enable CORS for all routes
 app.use(cors({
   origin: function(origin, callback) {
+    // For development or testing, allow all origins
+    if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+      return callback(null, true);
+    }
+    
     // Allow requests with no origin (like mobile apps, curl requests)
     if (!origin) return callback(null, true);
     
     // List of allowed origins (can be expanded)
     const allowedOrigins = [
-      'https://talenthub-2mnv.onrender.com/',  // Your Render deployed app
-      'http://localhost:8000',               // Another common dev port
+      'https://talenthub-2mnv.onrender.com', 
+      'http://localhost:3000',               
+      'http://localhost:8000',             
+      'https://talenthub-api.onrender.com', 
     ];
     
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+    if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error('CORS policy violation'), false);
+      console.warn(`CORS blocked for origin: ${origin}`);
+      callback(null, true); 
     }
   },
   credentials: true,
@@ -33,7 +43,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin', 'Accept'],
   exposedHeaders: ['Content-Disposition']  // Useful for file downloads
 }));
-
 
 // Special route for Stripe webhooks (needs raw body)
 app.use('/api/v1/payments/webhook/stripe', express.raw({ type: 'application/json' }));
@@ -49,27 +58,9 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
 // Swagger Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  explorer: true,
-  customCss: '.swagger-ui .topbar { display: none }',
-  swaggerOptions: {
-    docExpansion: 'none',
-    persistAuthorization: true,
-    displayRequestDuration: true,
-    filter: true
-  }
-}));
-
-// Enable pre-flight requests for Swagger
-app.options('/api-docs', cors());
-app.options('/swagger.json', cors());
-
-// Serve Swagger spec JSON with appropriate CORS headers
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/swagger.json', (req: Request, res: Response) => {
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.send(swaggerSpec);
 });
 

@@ -15,20 +15,8 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: process.env.NODE_ENV === 'production' 
-        ? 'https://talenthub-api.onrender.com' 
-        : 'http://localhost:3000',
-      description: process.env.NODE_ENV === 'production' 
-        ? 'Production server' 
-        : 'Development server',
-    },
-    {
-      url: 'https://talenthub-api.onrender.com',
-      description: 'Production server on Render',
-    },
-    {
       url: 'http://localhost:3000',
-      description: 'Local development server',
+      description: 'Development server',
     },
   ],
 };
