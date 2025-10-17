@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalentHub WebSocket Chat Demo</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .container {
+      display: flex;
+      height: 80vh;
+    }
+    .sidebar {
+      width: 200px;
+      border-right: 1px solid #ccc;
+      padding-right: 20px;
+    }
+    .chat-container {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-history {
+      flex: 1;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+    }
+    .message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      max-width: 70%;
+    }
+    .received {
+      background-color: #e5e5ea;
+      align-self: flex-start;
+    }
+    .sent {
+      background-color: #007bff;
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    .message-form {
+      display: flex;
+    }
+    .message-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    .send-button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .typing-indicator {
+      font-style: italic;
+      color: #666;
+      height: 1.2em;
+    }
+    .user {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+    }
+    .user:hover {
+      background-color: #f0f0f0;
+    }
+    .user.selected {
+      background-color: #e0e0e0;
+    }
+    .user-info {
+      display: flex;
+      justify-content: space-between;
+    }
+    .unread-count {
+      background-color: #ff3b30;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>TalentHub Chat Demo</h1>
+  
+  <div class="login-container" id="loginContainer">
+    <h2>Login</h2>
+    <div>
+      <label for="userId">User ID:</label>
+      <input type="text" id="userId" value="">
+    </div>
+    <div style="margin-top: 10px;">
+      <label for="token">Token:</label>
+      <input type="text" id="token" value="demo-token">
+    </div>
+    <button id="loginButton" style="margin-top: 10px;">Login</button>
+  </div>
+  
+  <div class="container" id="chatContainer" style="display: none;">
+    <div class="sidebar">
+      <h3>Conversations</h3>
+      <div id="usersList">
+        <!-- Users will be added here dynamically -->
+      </div>
+    </div>
+    
+    <div class="chat-container">
+      <div id="selectedUserName">Select a user to start chatting</div>
+      
+      <div class="chat-history" id="chatHistory">
+        <!-- Messages will be added here dynamically -->
+      </div>
+      
+      <div class="typing-indicator" id="typingIndicator"></div>
+      
+      <form class="message-form" id="messageForm">
+        <input type="text" class="message-input" id="messageInput" placeholder="Type a message..." disabled>
+        <button type="submit" class="send-button" id="sendButton" disabled>Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const loginContainer = document.getElementById('loginContainer');
+    const chatContainer = document.getElementById('chatContainer');
+    const usersList = document.getElementById('usersList');
+    const chatHistory = document.getElementById('chatHistory');
+    const messageInput = document.getElementById('messageInput');
+    const messageForm = document.getElementById('messageForm');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const selectedUserName = document.getElementById('selectedUserName');
+    
+    // State variables
+    let socket;
+    let currentUser;
+    let selectedUser;
+    let typingTimeout;
+    const conversations = {}; // Store conversations by user ID
+    const unreadCounts = {}; // Store unread counts by user ID
+    
+    // Mock users data (in real app, fetch from API)
+    const mockUsers = [
+      { id: 'user1', name: 'Jane Smith', role: 'EMPLOYER' },
+      { id: 'user2', name: 'John Doe', role: 'CANDIDATE' },
+      { id: 'user3', name: 'Alex Wong', role: 'EMPLOYER' },
+      { id: 'user4', name: 'Maria Garcia', role: 'CANDIDATE' }
+    ];
+    
+    // Initialize WebSocket connection on login
+    document.getElementById('loginButton').addEventListener('click', () => {
+      const userId = document.getElementById('userId').value.trim();
+      const token = document.getElementById('token').value.trim();
+      
+      if (!userId) {
+        alert('Please enter a user ID');
+        return;
+      }
+      
+      currentUser = { id: userId };
+      
+      // Connect to WebSocket server
+      socket = io('http://localhost:3000');
+      
+      socket.on('connect', () => {
+        console.log('Connected to WebSocket server');
+        
+        // Authenticate with the server
+        socket.emit('authenticate', { userId, token });
+      });
+      
+      socket.on('authenticated', (response) => {
+        if (response.success) {
+          console.log('Authentication successful');
+          loginContainer.style.display = 'none';
+          chatContainer.style.display = 'flex';
+          
+          // Load mock users (excluding current user)
+          loadUsers(mockUsers.filter(user => user.id !== userId));
+        } else {
+          console.error('Authentication failed:', response.error);
+          alert('Authentication failed: ' + response.error);
+        }
+      });
+      
+      // Listen for new messages
+      socket.on('new_message', (message) => {
+        console.log('New message received:', message);
+        
+        // Add message to conversation
+        if (!conversations[message.senderId]) {
+          conversations[message.senderId] = [];
+        }
+        
+        conversations[message.senderId].push({
+          id: message.id,
+          senderId: message.senderId,
+          content: message.content,
+          attachmentUrl: message.attachmentUrl,
+          createdAt: new Date(message.createdAt),
+          isMine: false
+        });
+        
+        // Update unread count if not in this conversation
+        if (!selectedUser || selectedUser.id !== message.senderId) {
+          unreadCounts[message.senderId] = (unreadCounts[message.senderId] || 0) + 1;
+          updateUsersList();
+        } else {
+          // If already in conversation, mark as read
+          markAsRead(message.senderId);
+          // Update chat display
+          displayMessages(conversations[message.senderId]);
+        }
+      });
+      
+      // Listen for typing indicators
+      socket.on('user_typing', (data) => {
+        if (selectedUser && data.userId === selectedUser.id) {
+          if (data.isTyping) {
+            typingIndicator.textContent = `${selectedUser.name} is typing...`;
+          } else {
+            typingIndicator.textContent = '';
+          }
+        }
+      });
+      
+      // Listen for read receipts
+      socket.on('messages_read', (data) => {
+        console.log(`Messages read by ${data.by} at ${new Date(data.at)}`);
+        // You could update UI to show read receipts here
+      });
+      
+      socket.on('disconnect', () => {
+        console.log('Disconnected from WebSocket server');
+      });
+    });
+    
+    // Load users into the sidebar
+    function loadUsers(users) {
+      usersList.innerHTML = '';
+      
+      users.forEach(user => {
+        const userElement = document.createElement('div');
+        userElement.className = 'user';
+        userElement.dataset.userId = user.id;
+        
+        const userInfo = document.createElement('div');
+        userInfo.className = 'user-info';
+        
+        const userName = document.createElement('div');
+        userName.textContent = user.name;
+        
+        userInfo.appendChild(userName);
+        
+        if (unreadCounts[user.id] && unreadCounts[user.id] > 0) {
+          const unreadBadge = document.createElement('div');
+          unreadBadge.className = 'unread-count';
+          unreadBadge.textContent = unreadCounts[user.id];
+          userInfo.appendChild(unreadBadge);
+        }
+        
+        userElement.appendChild(userInfo);
+        
+        userElement.addEventListener('click', () => selectUser(user));
+        usersList.appendChild(userElement);
+      });
+    }
+    
+    // Select a user to chat with
+    function selectUser(user) {
+      selectedUser = user;
+      
+      // Update UI
+      document.querySelectorAll('.user').forEach(el => {
+        el.classList.remove('selected');
+        if (el.dataset.userId === user.id) {
+          el.classList.add('selected');
+        }
+      });
+      
+      selectedUserName.textContent = `Chat with ${user.name}`;
+      messageInput.disabled = false;
+      document.getElementById('sendButton').disabled = false;
+      
+      // Initialize conversation if it doesn't exist
+      if (!conversations[user.id]) {
+        conversations[user.id] = [];
+      }
+      
+      // Display messages
+      displayMessages(conversations[user.id]);
+      
+      // Mark messages as read
+      if (unreadCounts[user.id]) {
+        markAsRead(user.id);
+        unreadCounts[user.id] = 0;
+        updateUsersList();
+      }
+    }
+    
+    // Display messages in the chat history
+    function displayMessages(messages) {
+      chatHistory.innerHTML = '';
+      
+      if (!messages || messages.length === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.textContent = 'No messages yet. Send a message to start the conversation.';
+        emptyMessage.style.textAlign = 'center';
+        emptyMessage.style.color = '#999';
+        emptyMessage.style.marginTop = '20px';
+        chatHistory.appendChild(emptyMessage);
+        return;
+      }
+      
+      messages.forEach(message => {
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${message.isMine ? 'sent' : 'received'}`;
+        
+        const contentElement = document.createElement('div');
+        contentElement.textContent = message.content;
+        messageElement.appendChild(contentElement);
+        
+        const timeElement = document.createElement('div');
+        timeElement.textContent = formatTime(message.createdAt);
+        timeElement.style.fontSize = '0.8em';
+        timeElement.style.opacity = '0.7';
+        timeElement.style.textAlign = message.isMine ? 'right' : 'left';
+        messageElement.appendChild(timeElement);
+        
+        chatHistory.appendChild(messageElement);
+      });
+      
+      // Scroll to bottom
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+    
+    // Format time for display
+    function formatTime(date) {
+      return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    // Send a message
+    messageForm.addEventListener('submit', event => {
+      event.preventDefault();
+      
+      const content = messageInput.value.trim();
+      if (!content || !selectedUser) return;
+      
+      // Emit the message
+      socket.emit('private_message', {
+        receiverId: selectedUser.id,
+        content
+      });
+      
+      // Add message to conversation
+      if (!conversations[selectedUser.id]) {
+        conversations[selectedUser.id] = [];
+      }
+      
+      // Optimistically add message to UI (will be confirmed by server response)
+      conversations[selectedUser.id].push({
+        id: 'temp-' + Date.now(),
+        content,
+        createdAt: new Date(),
+        isMine: true
+      });
+      
+      // Update UI
+      displayMessages(conversations[selectedUser.id]);
+      messageInput.value = '';
+    });
+    
+    // Handle typing indicators
+    messageInput.addEventListener('input', () => {
+      if (!selectedUser) return;
+      
+      // Emit typing event
+      socket.emit('typing', {
+        receiverId: selectedUser.id,
+        isTyping: true
+      });
+      
+      // Clear previous timeout
+      clearTimeout(typingTimeout);
+      
+      // Set timeout to stop typing indicator
+      typingTimeout = setTimeout(() => {
+        socket.emit('typing', {
+          receiverId: selectedUser.id,
+          isTyping: false
+        });
+      }, 2000);
+    });
+    
+    // Mark messages as read
+    function markAsRead(senderId) {
+      if (socket) {
+        socket.emit('mark_read', { senderId });
+      }
+    }
+    
+    // Update the users list (e.g., for unread counts)
+    function updateUsersList() {
+      const users = mockUsers.filter(user => user.id !== currentUser.id);
+      loadUsers(users);
+    }
+  </script>
+</body>
+</html>

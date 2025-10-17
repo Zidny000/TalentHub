@@ -19,6 +19,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
+// Serve static files from the public directory
+app.use('/public', express.static(path.join(process.cwd(), 'public')));
+
 // Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/swagger.json', (req: Request, res: Response) => {
@@ -28,11 +31,6 @@ app.get('/swagger.json', (req: Request, res: Response) => {
 
 // API Routes
 app.use('/api', routes);
-
-// API Health Check
-app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'OK', message: 'Server is running' });
-});
 
 // Default route
 app.get('/', (req: Request, res: Response) => {

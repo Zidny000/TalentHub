@@ -60,6 +60,12 @@ enum OfferStatus {
   WITHDRAWN
 }
 
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
 
 // MODELS
 
@@ -85,6 +91,8 @@ model User {
   candidateInterviews Interview[]      @relation("CandidateInterviews")
   employerOffers     JobOffer[]       @relation("EmployerOffers")
   candidateOffers    JobOffer[]       @relation("CandidateOffers")
+  sentMessages       Message[]        @relation("SentMessages")
+  receivedMessages   Message[]        @relation("ReceivedMessages")
 }
 
 model Job {
@@ -244,4 +252,23 @@ model JobOffer {
   @@index([interviewId])
   @@index([employerId])
   @@index([candidateId])
+}
+
+model Message {
+  id              String        @id @default(uuid())
+  senderId        String        // User who sent the message
+  receiverId      String        // User who received the message
+  content         String        // Message content
+  attachmentUrl   String?       // Optional file attachment
+  status          MessageStatus @default(SENT)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  sender          User          @relation("SentMessages", fields: [senderId], references: [id])
+  receiver        User          @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([createdAt]) // For efficient message history retrieval
 }

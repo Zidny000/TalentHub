@@ -45,3 +45,9 @@ export { interviewValidators };
 export { applicationValidators } from './application.validators';
 export { paymentValidators } from './payment.validators';
 export { jobOfferValidators } from './jobOffer.validators';
+export { 
+  sendMessageValidator,
+  conversationParamsValidator,
+  markAsReadValidator,
+  paginationValidator 
+} from './message.validators';

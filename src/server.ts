@@ -2,10 +2,12 @@ import dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
+import http from 'http';
 import app from './app';
 import { initializeDatabase, closeDatabase } from './config/dataSource';
 import { initializeRedis, closeRedis } from './config/redis';
 import logger from './utils/logger';
+import websocketService from './services/websocket.service';
 
 const PORT = process.env.PORT || 3000;
 
@@ -30,8 +32,16 @@ const startServer = async () => {
     // Initialize Redis connection
     await initializeRedis();
     
-    const server = app.listen(PORT, () => {
+    // Create HTTP server
+    const httpServer = http.createServer(app);
+    
+    // Initialize WebSocket service
+    websocketService.initialize(httpServer);
+    
+    // Start the server
+    const server = httpServer.listen(PORT, () => {
       logger.info(`Server running on port ${PORT}`);
+      logger.info(`WebSocket server is ready for connections`);
     });
 
     // Handle graceful shutdown
