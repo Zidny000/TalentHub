@@ -10,13 +10,11 @@ import path from 'path';
 // Create Express application
 const app: Application = express();
 
-// Enable CORS for all routes
 app.use(cors({
-    origin: ["https://talenthub-2mnv.onrender.com", "http://localhost:3000"],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin', 'Accept'],
-    credentials: true,
-}));
-
+        origin: ["https://talenthub-2mnv.onrender.com", "http://localhost:3000"],
+    }
+))
+app.options('*', cors())
 
 // Special route for Stripe webhooks (needs raw body)
 app.use('/api/v1/payments/webhook/stripe', express.raw({ type: 'application/json' }));
