@@ -24,7 +24,6 @@ RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
 
 # Build the app for production
 RUN npm run build
-RUN npm run serve
 
 EXPOSE 3000
 

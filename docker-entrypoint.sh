@@ -10,9 +10,9 @@ for i in $(seq 1 30); do
 done
 
 echo "Checking if Redis is ready..."
-# Try a simpler approach using redis-cli ping
+# Use redis-cli directly which is more reliable
 for i in $(seq 1 15); do
-  if (echo > /dev/tcp/redis/6379) >/dev/null 2>&1; then
+  if redis-cli -h redis ping | grep -q PONG; then
     echo "Redis is up!"
     break
   fi

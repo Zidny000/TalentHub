@@ -3,11 +3,22 @@ import { AppError } from '../utils/errors';
 import { ResponseFormatter } from '../utils/response';
 import { paymentService } from '../services/payment.service';
 import Stripe from 'stripe';
+import logger from '../utils/logger';
 
-// Initialize Stripe with the secret key
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-09-30.clover',
-});
+// Initialize Stripe with the secret key if available
+let stripe: Stripe | null = null;
+
+try {
+  if (process.env.STRIPE_SECRET_KEY) {
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-09-30.clover',
+    });
+  } else {
+    logger.warn('Stripe API key is missing. Payment functionality will be unavailable.', { service: 'talenthub-api' });
+  }
+} catch (error) {
+  logger.error('Error initializing Stripe client:', error);
+}
 
 export class PaymentController {
   /**
@@ -15,6 +26,11 @@ export class PaymentController {
    */
   async createJobPostPaymentSession(req: Request, res: Response) {
     try {
+      // Check if Stripe is initialized
+      if (!stripe) {
+        throw new AppError('Payment service is not available', 503);
+      }
+      
       const { jobId } = req.params;
       const userId = req.user?.userId as string;
       
@@ -43,6 +59,11 @@ export class PaymentController {
    */
   async handleStripeWebhook(req: Request, res: Response) {
     try {
+      // Check if Stripe is initialized
+      if (!stripe) {
+        throw new AppError('Payment service is not available', 503);
+      }
+      
       // Verify webhook signature
       const signature = req.headers['stripe-signature'] as string;
       
