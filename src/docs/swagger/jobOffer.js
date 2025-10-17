@@ -125,7 +125,7 @@
 
 /**
  * @swagger
- * /api/job-offers:
+ * /api/v1/job-offers:
  *   get:
  *     summary: Get all job offers for the logged-in user
  *     tags: [Job Offers]
@@ -172,8 +172,8 @@
  *         description: Unauthorized - User not authenticated
  *       500:
  *         description: Server error
- * 
- * /api/job-offers/{id}:
+ *
+ * /api/v1/job-offers/{id}:
  *   get:
  *     summary: Get a specific job offer
  *     tags: [Job Offers]
@@ -211,7 +211,7 @@
  *       500:
  *         description: Server error
  *
- * /api/job-offers/{id}/accept:
+ * /api/v1/job-offers/{id}/accept:
  *   post:
  *     summary: Accept a job offer (candidate only)
  *     tags: [Job Offers]
@@ -251,7 +251,7 @@
  *       500:
  *         description: Server error
  *
- * /api/job-offers/{id}/reject:
+ * /api/v1/job-offers/{id}/reject:
  *   post:
  *     summary: Reject a job offer (candidate only)
  *     tags: [Job Offers]
@@ -297,7 +297,7 @@
  *       500:
  *         description: Server error
  *
- * /api/job-offers/{id}/withdraw:
+ * /api/v1/job-offers/{id}/withdraw:
  *   post:
  *     summary: Withdraw a job offer (employer only)
  *     tags: [Job Offers]
@@ -343,7 +343,7 @@
  *       500:
  *         description: Server error
  *
- * /api/job-offers/application/{applicationId}:
+ * /api/v1/job-offers/application/{applicationId}:
  *   get:
  *     summary: Get job offers for a specific application
  *     tags: [Job Offers]
@@ -427,7 +427,3 @@
  *       500:
  *         description: Server error
  */
-
-module.exports = {
-  // Export Swagger components
-};

@@ -62,7 +62,7 @@
 
 /**
  * @swagger
- * /api/jobs/{id}/apply:
+ * /api/v1/jobs/{id}/apply:
  *   post:
  *     summary: Apply to a job posting
  *     tags: [Applications]
@@ -106,7 +106,7 @@
 
 /**
  * @swagger
- * /api/jobs/{id}/applications:
+ * /api/v1/jobs/{id}/applications:
  *   get:
  *     summary: Get all applications for a specific job
  *     tags: [Applications]
@@ -146,7 +146,7 @@
 
 /**
  * @swagger
- * /api/applications/{id}:
+ * /api/v1/applications/{id}:
  *   get:
  *     summary: Get detailed information about a specific application
  *     tags: [Applications]
@@ -184,7 +184,7 @@
 
 /**
  * @swagger
- * /api/jobs/{id}/export:
+ * /api/v1/jobs/{id}/export:
  *   get:
  *     summary: Export all applications for a job as a CSV file
  *     tags: [Applications]
@@ -216,7 +216,7 @@
 
 /**
  * @swagger
- * /api/applications/history:
+ * /api/v1/applications/history:
  *   get:
  *     summary: Get user's job application history
  *     tags: [Applications]

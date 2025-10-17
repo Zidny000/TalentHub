@@ -10,7 +10,7 @@ import path from 'path';
 const app: Application = express();
 
 // Special route for Stripe webhooks (needs raw body)
-app.use('/api/payments/webhook/stripe', express.raw({ type: 'application/json' }));
+app.use('/api/v1/payments/webhook/stripe', express.raw({ type: 'application/json' }));
 
 // Middleware
 app.use(bodyParser.json());
@@ -30,7 +30,7 @@ app.get('/swagger.json', (req: Request, res: Response) => {
 });
 
 // API Routes
-app.use('/api', routes);
+app.use('/api/v1', routes);
 
 // Default route
 app.get('/', (req: Request, res: Response) => {

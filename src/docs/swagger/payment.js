@@ -15,7 +15,7 @@
 
 /**
  * @swagger
- * /api/payments/jobs/{id}/payment:
+ * /api/v1/payments/jobs/{id}/payment:
  *   post:
  *     tags:
  *       - Payments
@@ -52,8 +52,8 @@
  *         description: Job not found
  *       500:
  *         description: Server error
- * 
- * /api/payments/webhook/stripe:
+ *
+ * /api/v1/payments/webhook/stripe:
  *   post:
  *     tags:
  *       - Payments

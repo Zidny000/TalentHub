@@ -94,7 +94,7 @@
 
 /**
  * @swagger
- * /api/messages:
+ * /api/v1/messages:
  *   post:
  *     summary: Send a new message
  *     tags: [Messages]
@@ -133,7 +133,7 @@
 
 /**
  * @swagger
- * /api/messages/conversation/{userId}:
+ * /api/v1/messages/conversation/{userId}:
  *   get:
  *     summary: Get conversation history with a user
  *     tags: [Messages]
@@ -188,7 +188,7 @@
 
 /**
  * @swagger
- * /api/messages/conversations:
+ * /api/v1/messages/conversations:
  *   get:
  *     summary: Get all conversations for the current user
  *     tags: [Messages]
@@ -221,7 +221,7 @@
 
 /**
  * @swagger
- * /api/messages/read/{senderId}:
+ * /api/v1/messages/read/{senderId}:
  *   put:
  *     summary: Mark messages from a user as read
  *     tags: [Messages]
@@ -254,7 +254,7 @@
 
 /**
  * @swagger
- * /api/messages/unread/count:
+ * /api/v1/messages/unread/count:
  *   get:
  *     summary: Get count of unread messages
  *     tags: [Messages]

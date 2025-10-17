@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /api/auth/register:
+ * /api/v1/auth/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Authentication]
@@ -59,7 +59,7 @@
 
 /**
  * @swagger
- * /api/auth/verify-email:
+ * /api/v1/auth/verify-email:
  *   get:
  *     summary: Verify user email with token
  *     tags: [Authentication]
@@ -93,7 +93,7 @@
 
 /**
  * @swagger
- * /api/auth/login:
+ * /api/v1/auth/login:
  *   post:
  *     summary: Login user
  *     tags: [Authentication]
@@ -145,7 +145,7 @@
 
 /**
  * @swagger
- * /api/auth/verify-2fa:
+ * /api/v1/auth/verify-2fa:
  *   post:
  *     summary: Verify two-factor authentication code
  *     tags: [Authentication]
@@ -178,7 +178,7 @@
 
 /**
  * @swagger
- * /api/auth/refresh:
+ * /api/v1/auth/refresh:
  *   post:
  *     summary: Refresh access token
  *     tags: [Authentication]
@@ -218,7 +218,7 @@
 
 /**
  * @swagger
- * /api/auth/logout:
+ * /api/v1/auth/logout:
  *   post:
  *     summary: Logout user (revoke refresh token)
  *     tags: [Authentication]

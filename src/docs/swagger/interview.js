@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /api/interviews:
+ * /api/v1/interviews:
  *   get:
  *     summary: Get current user interviews
  *     description: Retrieves interviews for the logged in user based on their role (employer or candidate)
@@ -49,8 +49,8 @@
  *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/ServerError'
- * 
- * /api/interviews/{id}:
+ *
+ * /api/v1/interviews/{id}:
  *   get:
  *     summary: Get interview details
  *     description: Retrieves details of a specific interview
@@ -116,8 +116,8 @@
  *         $ref: '#/components/responses/NotFoundError'
  *       500:
  *         $ref: '#/components/responses/ServerError'
- * 
- * /api/interviews/{id}/cancel:
+ *
+ * /api/v1/interviews/{id}/cancel:
  *   post:
  *     summary: Cancel an interview
  *     description: Cancels a scheduled interview
@@ -156,8 +156,8 @@
  *         $ref: '#/components/responses/NotFoundError'
  *       500:
  *         $ref: '#/components/responses/ServerError'
- * 
- * /api/interviews/{id}/complete:
+ *
+ * /api/v1/interviews/{id}/complete:
  *   post:
  *     summary: Complete an interview
  *     description: Marks an interview as completed
@@ -196,8 +196,8 @@
  *         $ref: '#/components/responses/NotFoundError'
  *       500:
  *         $ref: '#/components/responses/ServerError'
- * 
- * /api/interviews/application/{applicationId}:
+ *
+ * /api/v1/interviews/application/{applicationId}:
  *   post:
  *     summary: Schedule an interview
  *     description: Schedules a new interview for a job application

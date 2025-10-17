@@ -96,7 +96,7 @@
 
 /**
  * @swagger
- * /api/resumes:
+ * /api/v1/resumes:
  *   post:
  *     summary: Create a new resume
  *     tags: [Resumes]
@@ -130,7 +130,7 @@
 
 /**
  * @swagger
- * /api/resumes/my-resumes:
+ * /api/v1/resumes/my-resumes:
  *   get:
  *     summary: Get all resumes for the current user
  *     tags: [Resumes]
@@ -158,7 +158,7 @@
 
 /**
  * @swagger
- * /api/resumes/{id}:
+ * /api/v1/resumes/{id}:
  *   get:
  *     summary: Get a resume by ID
  *     tags: [Resumes]
@@ -256,7 +256,7 @@
 
 /**
  * @swagger
- * /api/resumes/{id}/pdf:
+ * /api/v1/resumes/{id}/pdf:
  *   get:
  *     summary: Get the PDF version of a resume
  *     tags: [Resumes]

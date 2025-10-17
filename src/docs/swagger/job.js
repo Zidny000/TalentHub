@@ -121,7 +121,7 @@
 
 /**
  * @swagger
- * /api/jobs:
+ * /api/v1/jobs:
  *   get:
  *     summary: List jobs with optional filters
  *     tags: [Jobs]
@@ -248,7 +248,7 @@
 
 /**
  * @swagger
- * /api/jobs/my/listings:
+ * /api/v1/jobs/my/listings:
  *   get:
  *     summary: Get jobs posted by the current user
  *     tags: [Jobs]
@@ -276,7 +276,7 @@
 
 /**
  * @swagger
- * /api/jobs/{id}:
+ * /api/v1/jobs/{id}:
  *   get:
  *     summary: Get job details by ID
  *     tags: [Jobs]
