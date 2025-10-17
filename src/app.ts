@@ -15,7 +15,6 @@ app.use(cors({
     'https://talenthub-2mnv.onrender.com',
     'https://talenthub-api.onrender.com',
     'http://localhost:3000',
-    'https://talenthub-1-1q5v.onrender.com'
   ],
   credentials: true,
 }));
