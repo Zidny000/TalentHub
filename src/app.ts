@@ -12,35 +12,11 @@ const app: Application = express();
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: function(origin, callback) {
-    // For development or testing, allow all origins
-    if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-      return callback(null, true);
-    }
-    
-    // Allow requests with no origin (like mobile apps, curl requests)
-    if (!origin) return callback(null, true);
-    
-    // List of allowed origins (can be expanded)
-    const allowedOrigins = [
-      'https://talenthub-2mnv.onrender.com', 
-      'http://localhost:3000',               
-      'http://localhost:8000',             
-      'https://talenthub-api.onrender.com', 
-    ];
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      console.warn(`CORS blocked for origin: ${origin}`);
-      callback(null, true); 
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin', 'Accept'],
-  exposedHeaders: ['Content-Disposition']  // Useful for file downloads
+    origin: ["https://talenthub-2mnv.onrender.com", "http://localhost:3000"],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin', 'Accept'],
+    credentials: true,
 }));
+
 
 // Special route for Stripe webhooks (needs raw body)
 app.use('/api/v1/payments/webhook/stripe', express.raw({ type: 'application/json' }));
