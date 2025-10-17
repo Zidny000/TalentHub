@@ -1,4 +1,5 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import logger from './utils/logger';
 import routes from './routes';
@@ -8,6 +9,15 @@ import path from 'path';
 
 // Create Express application
 const app: Application = express();
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: '*',                 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true
+}));
+
 
 // Special route for Stripe webhooks (needs raw body)
 app.use('/api/v1/payments/webhook/stripe', express.raw({ type: 'application/json' }));
