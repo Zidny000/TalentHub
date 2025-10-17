@@ -12,10 +12,26 @@ const app: Application = express();
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: '*',                 
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+    
+    // List of allowed origins (can be expanded)
+    const allowedOrigins = [
+      'https://talenthub-2mnv.onrender.com/',  // Your Render deployed app
+      'http://localhost:8000',               // Another common dev port
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy violation'), false);
+    }
+  },
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: true
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin', 'Accept'],
+  exposedHeaders: ['Content-Disposition']  // Useful for file downloads
 }));
 
 
@@ -33,9 +49,27 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
 // Swagger Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  swaggerOptions: {
+    docExpansion: 'none',
+    persistAuthorization: true,
+    displayRequestDuration: true,
+    filter: true
+  }
+}));
+
+// Enable pre-flight requests for Swagger
+app.options('/api-docs', cors());
+app.options('/swagger.json', cors());
+
+// Serve Swagger spec JSON with appropriate CORS headers
 app.get('/swagger.json', (req: Request, res: Response) => {
   res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.send(swaggerSpec);
 });
 

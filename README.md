@@ -289,3 +289,20 @@ For authenticated endpoints, use the "Authorize" button and enter your JWT token
 ```
 Bearer your_jwt_token_here
 ```
+
+## CI/CD Pipeline
+
+This project uses GitHub Actions for CI/CD pipeline integration with Render deployment:
+
+### Workflow Overview
+
+- **Continuous Integration**: Runs on all pull requests and pushes to the main branch
+  - Linting and code quality checks
+  - Unit and integration tests with PostgreSQL and Redis services
+  - Prisma schema validation and migrations
+
+- **Continuous Deployment**: Automatically deploys the application to Render when changes are pushed to the main branch
+  - Zero-downtime deployments
+  - Environment variable management through Render
+
+For more details on the CI/CD setup, see the [CI/CD documentation](docs/ci-cd.md).
