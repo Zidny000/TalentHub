@@ -8,6 +8,7 @@ import { initializeDatabase, closeDatabase } from './config/dataSource';
 import { initializeRedis, closeRedis } from './config/redis';
 import logger from './utils/logger';
 import websocketService from './services/websocket.service';
+import { createAdminUser } from './utils/createAdmin';
 
 const PORT = process.env.PORT || 3000;
 
@@ -28,6 +29,9 @@ const startServer = async () => {
   try {
     // Initialize database connection
     await initializeDatabase();
+    
+    // Create admin user if it doesn't exist
+    await createAdminUser();
     
     // Initialize Redis connection
     await initializeRedis();
