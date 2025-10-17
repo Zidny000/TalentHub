@@ -21,9 +21,5 @@ COPY prisma ./prisma/
 # Generate Prisma client
 RUN npx prisma generate
 
-# Copy scripts
-COPY wait-for-it.sh docker-entrypoint.sh ./
-RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
-
 # Expose port
 EXPOSE 3000

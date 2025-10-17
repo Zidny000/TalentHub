@@ -18,14 +18,4 @@ RUN npx prisma generate
 # Copy app source first
 COPY . .
 
-# Copy scripts
-COPY wait-for-it.sh docker-entrypoint.sh ./
-RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
-
-# Build the app for production
-RUN npm run build
-
 EXPOSE 3000
-
-ENTRYPOINT ["./docker-entrypoint.sh"]
-CMD ["node", "dist/server.js"]
