@@ -174,7 +174,7 @@ Use these credentials to access administrator features of the platform.
    STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
    
    # Brevo API Key
-   BREVO_API_KEY=your_brevo_api_key_here
+   BREVO_API_KEY=brvo-api-key
    ```
 
 4. Run database migrations:
