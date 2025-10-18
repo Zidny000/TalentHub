@@ -23,7 +23,26 @@ TalentHub is a robust backend system for managing the complete hiring process. T
 - **Email Service**: Nodemailer
 - **PDF Generation**: Puppeteer
 - **Testing**: Jest with Supertest
-- **Containerization**: Docker and Docker Compose
+- **Containerization**: Docker and Docker 
+
+## API Documentation with Swagger
+
+The TalentHub API is fully documented using Swagger/OpenAPI. To access the interactive documentation:
+
+1. Start the application (locally or via Docker)
+2. Navigate to `http://localhost:3000/api-docs` in your browser
+3. You'll see the interactive Swagger UI with all available endpoints
+4. Endpoints are grouped by tags (auth, jobs, applications, etc.)
+5. You can:
+  - Expand each endpoint to see details (parameters, request body schema, responses)
+  - Try out endpoints directly from the UI (authenticate first for protected routes)
+  - View model schemas and data structures
+  - Download the OpenAPI specification
+
+For authenticated endpoints, use the "Authorize" button and enter your JWT token in the format:
+```
+Bearer your_jwt_token_here
+```
 
 ## Database Schema
 
@@ -134,7 +153,9 @@ Use these credentials to access administrator features of the platform.
    ```
    # Server
    PORT=3000
-   NODE_ENV=development
+   NODE_ENV=
+   
+   API_URL=http://localhost:3000
    
    # Database
    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/talenthub?schema=public
@@ -152,12 +173,8 @@ Use these credentials to access administrator features of the platform.
    STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
    STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
    
-   # Email
-   SMTP_HOST=smtp.example.com
-   SMTP_PORT=587
-   SMTP_USER=user@example.com
-   SMTP_PASS=your_password
-   EMAIL_FROM=noreply@talenthub.com
+   # Brevo API Key
+   BREVO_API_KEY=your_brevo_api_key_here
    ```
 
 4. Run database migrations:
@@ -221,40 +238,6 @@ npm run test:coverage
    docker-compose -f docker-compose.dev.yml down
    ```
 
-### Production Environment
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Zidny000/TalentHub.git
-   cd TalentHub
-   ```
-
-2. Create a `.env` file with production settings.
-
-3. Start the production Docker environment:
-   ```bash
-   docker-compose up -d
-   ```
-   This will:
-   - Build the application with optimized production settings
-   - Create database and cache containers
-   - Set up pgAdmin for database management
-   - Run the application in production mode
-
-4. Access the application:
-   - API: http://localhost:3000
-   - PgAdmin: http://localhost:5050 (Email: admin@talenthub.com, Password: admin)
-
-5. Stop the production environment:
-   ```bash
-   docker-compose down
-   ```
-
-   To remove volumes as well (clears all data):
-   ```bash
-   docker-compose down -v
-   ```
-
 ### Environment Variables
 
 For both Docker environments, ensure your `.env` file contains the necessary variables as described in the Local Setup section. The Docker configurations will use these environment variables for proper setup.
@@ -299,25 +282,6 @@ Both commands create a `postman_collection.json` file in the root directory of t
 3. Follow the authentication flow: register, verify email, login, and then access protected resources
 
 For detailed instructions on using the Postman collection, including authentication flows, environment setup, and troubleshooting, see the [Postman Guide](docs/postman-guide.md).
-
-## API Documentation with Swagger
-
-The TalentHub API is fully documented using Swagger/OpenAPI. To access the interactive documentation:
-
-1. Start the application (locally or via Docker)
-2. Navigate to `http://localhost:3000/api-docs` in your browser
-3. You'll see the interactive Swagger UI with all available endpoints
-4. Endpoints are grouped by tags (auth, jobs, applications, etc.)
-5. You can:
-   - Expand each endpoint to see details (parameters, request body schema, responses)
-   - Try out endpoints directly from the UI (authenticate first for protected routes)
-   - View model schemas and data structures
-   - Download the OpenAPI specification
-
-For authenticated endpoints, use the "Authorize" button and enter your JWT token in the format:
-```
-Bearer your_jwt_token_here
-```
 
 ## CI/CD Pipeline
 
